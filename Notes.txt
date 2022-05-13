@@ -1,0 +1,43 @@
+Creating the application images:
+===============================
+
+Created the res/ images in Android Studio. New project, right click on Res, New Image Asset,
+then using the separate background and foreground PNGs.
+
+https://developer.android.com/studio/write/image-asset-studio
+
+
+Building it:
+============
+
+https://developer.android.com/studio/build/building-cmdline
+
+see options for uploading over usb
+
+cat keystore.properties
+storePassword=secret
+keyPassword=secret
+keyAlias=Drop
+storeFile=test.jks
+
+./gradlew assemble && ~/bin/gdrive upload -p 1J2Xitf2gzTs44OQz6Ialx2ONB-PAtZih android/build/outputs/apk/release/android-release.apk
+android/build/outputs/apk/release/android-release.apk
+
+
+Sounds:
+=======
+
+click:
+https://freesound.org/people/JonnyRuss01/sounds/478197/
+
+drop:
+https://freesound.org/people/TampaJoey/sounds/588502/
+
+crash:
+https://freesound.org/people/timgormly/sounds/170958/
+
+gong:
+https://freesound.org/people/josemaria/sounds/55438/
+
+triangle
+https://freesound.org/people/acclivity/sounds/31189/
