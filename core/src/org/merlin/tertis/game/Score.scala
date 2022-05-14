@@ -12,14 +12,13 @@ class Score {
   var score: Int = 0
   var count: Int = 0
   var rows: Int = 0
-  var speedRun: Int = 0
+  var speedRun: Int = 0 // sequential piece dropped at >= SpeedRunSpeed
   var highScore: Boolean = false
 
-  // TODO: gravity assist should be equivalent to speedy if you are quick about it. zen lower score?
-
-  def drop(speedy: Boolean): Unit = {
+  // speed is multiple of slow speed that was used
+  def drop(speed: Float): Unit = {
     count = count + 1
-    speedRun = speedy.fold(1 + speedRun, 0)
+    speedRun = (speed >= SpeedRunSpeed).fold(1 + speedRun, 0)
     score = score + speedRun
   }
 
@@ -71,4 +70,5 @@ class Score {
   }
 
   val FadeInSeconds = 1f
+  val SpeedRunSpeed = 4f // a piece is speedy if dropped at >= 4x slow speed
 }

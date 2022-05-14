@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input.Peripheral
 import com.badlogic.gdx.graphics.g2d.{BitmapFont, PolygonSpriteBatch}
 import org.merlin.tertis.Geometry._
 import org.merlin.tertis.Tertis
+import org.merlin.tertis.util.Average
 
 case class BlockLoc(block: Block, rotation: Int, column: Int, y: Float)
 
@@ -15,15 +16,15 @@ object BlockLoc {
 }
 
 class Player(game: Game) {
-  // how many seconds has this been touched down
+  // how many seconds has the piece been touched down
   var touchdown: Option[Float] = None
-  // was this piece played all speeidly
-  var speedy: Boolean = true
+  // average speed
+  val speed = new Average
 
   var blockOpt: Option[BlockLoc] = None
 
   def next(block: Block): Unit = {
-    speedy = true
+    speed.reset()
     blockOpt = Some(BlockLoc(block))
   }
 
@@ -53,7 +54,6 @@ class Player(game: Game) {
     val now = System.currentTimeMillis
     val fastness =
       game.fast.fold(1f, Prefs.TiltSpeed.fold(tiltSpeed, 0f))
-    if (fastness < .8f) speedy = false
 
     val speedup =
       1f + game.zenMode.fold(
@@ -64,6 +64,8 @@ class Player(game: Game) {
       GravitySpeed,
       SlowSpeed + (FastSpeed - SlowSpeed) * fastness * speedup
     )
+    speed += velocityY
+
     // if you move two dimension units you could jump through blocks
     val deltaY = (velocityY * Dimension * delta) min (Dimension * 15 / 8)
     val newY = oldLoc.y - deltaY
@@ -105,7 +107,7 @@ class Player(game: Game) {
             touchdown = None
             blockOpt = None
             game.gravity = false
-            game.score.drop(speedy)
+            game.score.drop(speed.value / SlowSpeed)
           } else {
             touchdown = touchdown.map(_ + delta).orElse(Some(0f))
           }
