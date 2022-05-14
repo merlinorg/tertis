@@ -12,7 +12,7 @@ object Starfield {
   val NumStars = 256
   val FadeInSeconds = 5f
 
-  var alpha = 1f
+  var alpha = 0f
 
   val stars: ListBuffer[Star] = mutable.ListBuffer
     .fill(NumStars)(Star.newStar)
@@ -54,6 +54,9 @@ object Starfield {
     while (stars.size < NumStars)
       stars.prepend(Star.newStar(rotation))
   }
+
+  // This is all a bit wonky but I switched from stars only within the frame to stars only outside the
+  // frame to a bit of both...
 
   def render(batch: PolygonSpriteBatch): Unit = {
     renderImpl(batch, within = true)

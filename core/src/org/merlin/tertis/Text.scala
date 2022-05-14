@@ -3,11 +3,7 @@ package org.merlin.tertis
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.graphics.g2d.{
-  BitmapFont,
-  GlyphLayout,
-  PolygonSpriteBatch
-}
+import com.badlogic.gdx.graphics.g2d.{BitmapFont, GlyphLayout, PolygonSpriteBatch}
 import org.merlin.tertis.Geometry.Dimension
 import org.merlin.tertis.home.Home
 
@@ -18,13 +14,13 @@ object Text {
     )
     val parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
     parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + CharExtras
-    parameter.size = Dimension
+    parameter.size = Dimension.toInt
     bigFont = generator.generateFont(parameter)
-    parameter.size = Dimension * 3 / 4
+    parameter.size = (Dimension * 3 / 4).toInt
     mediumFont = generator.generateFont(parameter)
-    parameter.size = Dimension * 9 / 16
+    parameter.size = (Dimension * 9 / 16).toInt
     smallFont = generator.generateFont(parameter)
-    parameter.size = Dimension * 3 / 8
+    parameter.size = (Dimension * 3 / 8).toInt
     tinyFont = generator.generateFont(parameter)
     generator.dispose()
   }
@@ -42,11 +38,11 @@ object Text {
       color: Color,
       text: String,
       y: Float,
-      x: Float = 0,
-      width: Float = Gdx.graphics.getWidth
+      x: Float = 0f,
+      width: Float = Geometry.ScreenWidth
   ): Unit = {
     font.setColor(color)
-    font.draw(batch, text, x, y, width, 1, false)
+    font.draw(batch, text, x, y, width, CenterAlign, false)
   }
 
   def draw(

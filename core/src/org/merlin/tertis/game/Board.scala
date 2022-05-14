@@ -50,14 +50,14 @@ class Board(game: Game) {
     if (ending) {
       redAlpha = redAlpha.alphaUp(delta, RedFadeSeconds)
       redVelocity = redVelocity + delta / RedShiftAccelerationSeconds
-      redShift = (redShift + redVelocity) min BoardRows
+      redShift = (redShift + redVelocity) min BoardRows.toFloat
     } else if (animating) {
       if (redAlpha < 1f) {
         redAlpha = redAlpha.alphaUp(delta, RedFadeSeconds)
       } else {
         redVelocity = redVelocity + delta / RedShiftAccelerationSeconds
         val xShift = redShift
-        redShift = (redShift + redVelocity) min dropRows.size
+        redShift = (redShift + redVelocity) min dropRows.size.toFloat
         if (redShift >= dropRows.size) {
           var drop = 0
           var mass = 0
@@ -91,8 +91,8 @@ class Board(game: Game) {
     for (j <- 0 until BoardRows) {
       if (dropRows.contains(j)) dropped = dropped + 1
       val yShift = ending.fold(
-        (redShift * Dimension).toInt,
-        (redShift * Dimension).toInt min (dropped * Dimension)
+        (redShift * Dimension).floor,
+        (redShift * Dimension).floor min (dropped * Dimension)
       )
       for (i <- 0 until Columns) {
         val region = board(j * Columns + i)
@@ -106,7 +106,7 @@ class Board(game: Game) {
             batch,
             color,
             OffsetX + i * Dimension,
-            OffsetY + j * Dimension - yShift,
+            OffsetY + j * Dimension - yShift.floor,
             Dimension,
             Dimension,
             Bevel,

@@ -6,16 +6,30 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 compileScala {
-    scalaCompileOptions.optimize = true
-    scalaCompileOptions.additionalParameters = ['-target:jvm-1.8',  '-feature',
-                                                '-language:postfixOps', '-language:implicitConversions']
+    scalaCompileOptions.deprecation = true
+    scalaCompileOptions.unchecked = true
+    scalaCompileOptions.optimize = false
+    scalaCompileOptions.additionalParameters = [
+            '-target:jvm-1.8',
+            '-feature',
+            '-language:higherKinds',
+            '-language:existentials',
+            '-encoding', 'UTF-8',
+            '-opt:l:inline',
+            '-opt-inline-from:**',
+            '-opt-warnings:none',
+            '-Ybackend-parallelism', '4',
+            '-Xlint:-unused',
+            '-Ywarn-unused:imports',
+            '-Xfatal-warnings'
+    ]
 }
 
 dependencies {
     implementation 'org.scala-lang:scala-library:2.13.8'
 }
 
-sourceSets.main.scala.srcDirs = [ "src/" ]
+sourceSets.main.scala.srcDirs = ["src/"]
 sourceSets.main.resources.srcDirs = ["../assets"]
 
 project.ext.mainClassName = "org.merlin.tertis.DesktopLauncher"
@@ -24,7 +38,7 @@ project.ext.assetsDir = new File("../assets")
 import org.gradle.internal.os.OperatingSystem
 
 task run(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
+    mainClass = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = project.assetsDir
@@ -37,7 +51,7 @@ task run(dependsOn: classes, type: JavaExec) {
 }
 
 task debug(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
+    mainClass = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     workingDir = project.assetsDir

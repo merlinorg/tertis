@@ -35,13 +35,12 @@ class NextUp {
       alpha: Float,
       y: Float
   ): Unit = {
-    val Small = Dimension / 2
+    val Small = (Dimension / 2).floor
     // It is known that the shapes have width 2..4 and height 1..2
     val nextX =
-      OffsetX + Columns * Dimension - (4 + block.size) * Small / 2
+      (OffsetX + Columns * Dimension - (4 + block.size) * Small / 2).floor
     val nextY =
-      OffsetY + Rows * Dimension + (1 - block.vOffset) * Small + (y * (1f - alpha) * Dimension).toInt
-    // + (2 - next.vWidth) * Small / 2
+      (OffsetY + Rows * Dimension + (1 - block.vOffset) * Small + (y * (1f - alpha) * Dimension)).floor
     val nextColor = block.getColor ⍺⍺ alpha ⍺ 0.5f
     block.eachSquare(
       0,

@@ -1,7 +1,6 @@
 package org.merlin.tertis
 package game
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import org.merlin.tertis.Scene
@@ -52,9 +51,9 @@ class Over(board: Board, score: Score) extends Scene {
     val content =
       Text.mediumFont.getLineHeight + Text.smallFont.getLineHeight + 5 * Text.tinyFont.getLineHeight
     val margin =
-      (Gdx.graphics.getHeight - content) / 4
+      (Geometry.ScreenHeight - content) / 4
 
-    val textY = Gdx.graphics.getHeight - margin
+    val textY = Geometry.ScreenHeight - margin
     Text.draw(
       batch,
       Text.mediumFont,

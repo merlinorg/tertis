@@ -3,7 +3,7 @@ package game
 
 import com.badlogic.gdx.graphics.g2d.{GlyphLayout, PolygonSpriteBatch}
 import org.merlin.tertis.Geometry._
-import org.merlin.tertis.{Prefs, Tertis}
+import org.merlin.tertis.Prefs
 
 // on phone fwiw 12 minutes for 120 rows
 class Score {

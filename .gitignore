@@ -4,8 +4,8 @@
 *.war
 *.ear
 hs_err_pid*
-keystore.properties
-test.jks
+*.jks
+.java-version
 
 ## Robovm
 /ios/robovm-build/
@@ -95,6 +95,7 @@ nb-configuration.xml
 ## Gradle
 
 /local.properties
+/keystore.properties
 .gradle/
 gradle-app.setting
 /build/

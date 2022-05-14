@@ -1,8 +1,8 @@
 package org.merlin.tertis.game
 
 import com.badlogic.gdx.Input.Keys
-import com.badlogic.gdx.{Gdx, InputAdapter}
-import org.merlin.tertis.BooleanOps
+import com.badlogic.gdx.InputAdapter
+import org.merlin.tertis.Geometry
 
 import scala.collection.mutable
 
@@ -29,7 +29,7 @@ class GameControl(game: Game) extends InputAdapter {
       button: Int
   ): Boolean = {
     down.remove(pointer) foreach { case (oldX, oldY) =>
-      val third = oldX * 3 / Gdx.graphics.getWidth
+      val third = oldX * 3 / Geometry.ScreenWidth
 
       val swipe =
         (oldX - screenX) * (oldX - screenX) + (oldY - screenY) * (oldY - screenY) > SwipeDistance * SwipeDistance
@@ -126,5 +126,5 @@ object GameControl {
     Keys.ALT_LEFT,
     Keys.ALT_RIGHT
   )
-  private val SwipeDistance = Gdx.graphics.getHeight / 32
+  private val SwipeDistance = Geometry.ScreenHeight / 32
 }

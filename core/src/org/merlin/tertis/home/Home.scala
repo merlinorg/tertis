@@ -1,7 +1,6 @@
 package org.merlin.tertis
 package home
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import org.merlin.tertis.Geometry._
@@ -25,23 +24,23 @@ class Home(paused: Option[Game] = None) extends Scene {
   private val IconSize = Dimension * 3 / 4
   private val IconCount = 3
   private val IconMargin =
-    (Gdx.graphics.getWidth - IconCount * IconSize) / (IconCount + 1)
-  private val IconOffsetX = IconMargin + IconSize / 2
+    ((Geometry.ScreenWidth - IconCount * IconSize) / (IconCount + 1)).floor
+  private val IconOffsetX = (IconMargin + IconSize / 2).floor
   private val IconSpacing = IconMargin + IconSize
 
   private val HighScoreSize =
-    (Text.smallFont.getLineHeight + Text.tinyFont.getLineHeight).toInt
-  private val LogoWidth = Gdx.graphics.getWidth * 2 / 3
+    Text.smallFont.getLineHeight + Text.tinyFont.getLineHeight
+  private val LogoWidth = (Geometry.ScreenWidth * 2 / 3).floor
 
   private val FooterMargin =
-    (Gdx.graphics.getHeight - LogoWidth) / 4
+    ((Geometry.ScreenHeight - LogoWidth) / 4).floor
   private val IconOffsetY =
-    Gdx.graphics.getHeight - (Gdx.graphics.getHeight - LogoWidth) / 4
+    (Geometry.ScreenHeight - (Geometry.ScreenHeight - LogoWidth) / 4).floor
 
   private val baseIcons: List[Icon] = List(
     new PlayIcon(
-      Gdx.graphics.getWidth / 2,
-      Gdx.graphics.getHeight / 2,
+      Geometry.ScreenWidth / 2,
+      Geometry.ScreenHeight / 2,
       LogoWidth / 2,
       this
     ),
@@ -82,8 +81,8 @@ class Home(paused: Option[Game] = None) extends Scene {
   )
 
   private val iconsWithDiscard = new BasicIcon(
-    Gdx.graphics.getWidth / 2 - Dimension * 9 / 4, // failure to get real dimensions
-    (FooterMargin + HighScoreSize - Text.tinyFont.getLineHeight / 2 - Text.smallFont.getAscent).toInt,
+    Geometry.ScreenWidth / 2 - Dimension * 9 / 4, // failure to get real dimensions
+    FooterMargin + HighScoreSize - Text.tinyFont.getLineHeight / 2 - Text.smallFont.getAscent,
     IconSize / 2,
     Tertis.trash,
     () => {
@@ -146,12 +145,12 @@ class Home(paused: Option[Game] = None) extends Scene {
   }
 
   private def drawLogo(batch: PolygonSpriteBatch): Unit = {
-    val logoOffset = (Gdx.graphics.getWidth - LogoWidth) / 2
+    val logoOffset = (Geometry.ScreenWidth - LogoWidth) / 2
     batch.setColor(1, 1, 1, logoAlpha * logoAlpha)
     batch.draw(
       Tertis.logo,
       logoOffset,
-      Gdx.graphics.getHeight / 2 - LogoWidth / 2,
+      Geometry.ScreenHeight / 2 - LogoWidth / 2,
       LogoWidth,
       LogoWidth
     )

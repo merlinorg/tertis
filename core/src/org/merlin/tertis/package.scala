@@ -81,12 +81,18 @@ package object tertis {
   }
 
   implicit class ColorOps(val self: Color) extends AnyVal {
+    /** Returns a new colour with alpha set to [alpha]. */
+    def withAlpha(alpha: Float): Color =
+      new Color(self.r, self.g, self.b, alpha)
+
+    /** Returns a new colour with alpha multiplied by [alpha]. */
     def ⍺(alpha: Float): Color =
       new Color(self.r, self.g, self.b, self.a * alpha)
 
+    /** Returns a new colour with alpha multiplied by [alpha]². */
     def ⍺⍺(alpha: Float): Color =
       new Color(self.r, self.g, self.b, self.a * alpha * alpha)
   }
 
-  // implicit def optionOps[A](a: Option[A]): OptionOps[A] = new OptionOps(a)
+  val CenterAlign = 1
 }

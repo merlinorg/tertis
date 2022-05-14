@@ -12,9 +12,9 @@ trait Icon {
   import Icon._
 
   def draw(batch: PolygonSpriteBatch, alpha: Float): Unit
-  def x: Int
-  def y: Int
-  def size: Int
+  def x: Float
+  def y: Float
+  def size: Float
   def onPress(): Unit = ()
   def onRelease(inside: Boolean): Unit = ()
 
@@ -56,9 +56,9 @@ abstract class BaseIcon(disabled: Boolean = false) extends Icon {
 }
 
 class PrefIcon(
-    val x: Int,
-    val y: Int,
-    val size: Int,
+    val x: Float,
+    val y: Float,
+    val size: Float,
     pref: Pref,
     ifTrue: TextureWrapper,
     ifFalse: TextureWrapper
@@ -73,9 +73,9 @@ class PrefIcon(
 }
 
 class BasicIcon(
-    val x: Int,
-    val y: Int,
-    val size: Int,
+    val x: Float,
+    val y: Float,
+    val size: Float,
     texture: TextureWrapper,
     callback: () => Unit,
     color: Color = White
@@ -90,9 +90,9 @@ class BasicIcon(
 }
 
 class CheckIcon(
-    val x: Int,
-    val y: Int,
-    val size: Int,
+    val x: Float,
+    val y: Float,
+    val size: Float,
     pref: Pref,
     label: String,
     description: String,
@@ -127,9 +127,9 @@ class CheckIcon(
 }
 
 class KeyIcon(
-    val x: Int,
-    val y: Int,
-    val size: Int,
+    val x: Float,
+    val y: Float,
+    val size: Float,
     icon: TextureWrapper,
     rotation: Float,
     label: String
@@ -163,11 +163,11 @@ class KeyIcon(
   override def clicked(): Unit = ()
 }
 
-class PlayIcon(val x: Int, val y: Int, val size: Int, home: Home)
+class PlayIcon(val x: Float, val y: Float, val size: Float, home: Home)
     extends BaseIcon {
   override def draw(batch: PolygonSpriteBatch, alpha: Float): Unit = {
     val playScale = alpha * alpha * (if (pressed) .95f else 1f)
-    val playWidth = playScale * Gdx.graphics.getWidth / 6
+    val playWidth = playScale * Geometry.ScreenWidth / 6
     val playHeight = Tertis.play.height * playWidth / Tertis.play.width
     batch.setColor(1, 1, 1, alpha * alpha)
     val (dX, dY) = if (compassAvailable) compassShift else (0f, 0f)

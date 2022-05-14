@@ -1,10 +1,8 @@
 package org.merlin.tertis.common
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.{MathUtils, Quaternion, Vector3}
-import org.merlin.tertis.Tertis
+import org.merlin.tertis.{Geometry, Tertis}
 
 case class Star(
     location: Vector3
@@ -18,7 +16,7 @@ case class Star(
     z = rotated.z
     x = (rotated.x * ViewerDistance / z + w2).floor
     y = (rotated.y * ViewerDistance / z + h2).floor
-    (z > ViewerDistance) && (x >= 0) && (y >= 0) && (x < Gdx.graphics.getWidth) && (y < Gdx.graphics.getHeight)
+    (z > ViewerDistance) && (x >= 0) && (y >= 0) && (x < Geometry.ScreenWidth) && (y < Geometry.ScreenHeight)
   }
 
   def draw(
@@ -41,9 +39,9 @@ case class Star(
 }
 
 object Star {
-  private val size = (graphics.getWidth / 500f).floor
-  private val w2 = Gdx.graphics.getWidth * .5f
-  private val h2 = Gdx.graphics.getHeight * .5f
+  private val size = (Geometry.ScreenWidth / 500f).floor
+  private val w2 = Geometry.ScreenWidth * .5f
+  private val h2 = Geometry.ScreenHeight * .5f
   private val ViewerDistance = h2 * 2
   val FarDistance = 10 * ViewerDistance
 

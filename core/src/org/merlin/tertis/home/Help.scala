@@ -1,7 +1,6 @@
 package org.merlin.tertis
 package home
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import org.merlin.tertis.Geometry._
@@ -20,12 +19,12 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
   var alpha: Float = 0f
   var instructed: Float = 0f
 
-  private val IconSize = Dimension * 3 / 4
+  private val IconSize = (Dimension * 3 / 4).floor
 
   val closeIcon = List(
     new BasicIcon(
-      Gdx.graphics.getWidth - IconSize * 2,
-      Gdx.graphics.getHeight - IconSize * 2,
+      Geometry.ScreenWidth - IconSize * 2,
+      Geometry.ScreenHeight - IconSize * 2,
       IconSize,
       Tertis.close,
       () => {
@@ -73,7 +72,7 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
   private val DesktopIconLeft = Dimension * 3
   private val DesktopIconInterval = IconSize * 2
   private val DesktopIconsTop =
-    (Gdx.graphics.getHeight + (DesktopIconInterval * 4 + IconSize)) / 2
+    ((Geometry.ScreenHeight + (DesktopIconInterval * 4 + IconSize)) / 2).floor
 
   val desktopIcons: List[Icon] = List(
     new KeyIcon(
@@ -133,25 +132,25 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
     val color = Icon.White ⍺⍺ alpha
     val grey = Icon.Grey ⍺⍺ alpha
     val columnSpacing = Dimension / 2
-    val columnWidth = (Gdx.graphics.getWidth - columnSpacing * 6) / 3
-    val scale = IconSize.toFloat / 512
+    val columnWidth = (Geometry.ScreenWidth - columnSpacing * 6) / 3
+    val scale = IconSize / 512
     val helpEntryHeight =
       Text.smallFont.getLineHeight + Text.tinyFont.getLineHeight + Dimension * 5 / 4
     val totalHeight = helpEntryHeight * 3 + 2 * Dimension * 2
     val initialY =
-      Gdx.graphics.getHeight - (Gdx.graphics.getHeight - totalHeight) / 2
+      Geometry.ScreenHeight - (Geometry.ScreenHeight - totalHeight) / 2
     batch.setColor(color)
     Text.smallFont.setColor(color)
     mobileHelps.foreach { help =>
-      val w = help.icon.width * scale
-      val h = help.icon.height * scale
-      val x = columnSpacing + (columnWidth + columnSpacing * 2) * help.x
-      val y = initialY - 2 * Dimension * help.y
+      val w = (help.icon.width * scale).floor
+      val h = (help.icon.height * scale).floor
+      val x = (columnSpacing + (columnWidth + columnSpacing * 2) * help.x).floor
+      val y = (initialY - 2 * Dimension * help.y).floor
       Text.draw(batch, Text.smallFont, color, help.label, y, x, columnWidth)
       batch.draw(
         help.icon,
-        x + (columnWidth - w) / 2,
-        y - Text.smallFont.getLineHeight - (h + IconSize) / 2,
+        (x + (columnWidth - w) / 2).floor,
+        (y - Text.smallFont.getLineHeight - (h + IconSize) / 2).floor,
         w,
         h
       )
@@ -160,23 +159,23 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
         Text.tinyFont,
         grey,
         help.desc,
-        y - Text.smallFont.getLineHeight - Dimension * 5 / 4,
+        (y - Text.smallFont.getLineHeight - Dimension * 5 / 4).floor,
         x,
         columnWidth
       )
     }
     batch.draw(
       Tertis.separator,
-      columnWidth + columnSpacing * 2 - Dimension / 32,
+      (columnWidth + columnSpacing * 2 - Dimension / 32).floor,
       initialY - totalHeight,
-      Dimension / 16,
+      (Dimension / 16).ceil,
       totalHeight
     )
     batch.draw(
       Tertis.separator,
-      columnWidth * 2 + columnSpacing * 4 - Dimension / 32,
+      (columnWidth * 2 + columnSpacing * 4 - Dimension / 32).floor,
       initialY - totalHeight,
-      Dimension / 16,
+      (Dimension / 16).ceil,
       totalHeight
     )
 

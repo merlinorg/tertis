@@ -1,6 +1,7 @@
 package org.merlin.tertis.home
 
-import com.badlogic.gdx.{Gdx, InputAdapter}
+import com.badlogic.gdx.InputAdapter
+import org.merlin.tertis.Geometry
 
 import scala.collection.mutable
 
@@ -36,7 +37,16 @@ abstract class IconAdapter(icons: => List[Icon]) extends InputAdapter {
   }
 
   // I deliberately pass the full width of the icon as its radius so the touch area is bigger
-  def within(screenX: Int, screenY: Int, x: Int, y: Int, radius: Int): Boolean =
-    (x - screenX) * (x - screenX) + (Gdx.graphics.getHeight - screenY - y) * (Gdx.graphics.getHeight - screenY - y) < radius * radius
+  def within(
+      screenX: Int,
+      screenY: Int,
+      x: Float,
+      y: Float,
+      radius: Float
+  ): Boolean = {
+    val dx = x - screenX.toFloat
+    val dy = Geometry.ScreenHeight - screenY.toFloat - y
+    dx * dx + dy * dy < radius * radius
+  }
 
 }

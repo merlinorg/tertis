@@ -1,7 +1,6 @@
 package org.merlin.tertis
 package home
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import org.merlin.tertis.Geometry.Dimension
 import org.merlin.tertis.Scene
@@ -15,14 +14,14 @@ class Settings(home: Home) extends Scene {
   var alpha: Float = 0f
   var done: Boolean = false
 
-  private val IconSize = Dimension * 3 / 4
-  private val IconTop = Gdx.graphics.getHeight - IconSize * 5
+  private val IconSize = (Dimension * 3 / 4).floor
+  private val IconTop = Geometry.ScreenHeight - IconSize * 5
   private val IconSpacing = IconSize * 3
 
   val icons: List[Icon] = List(
     new BasicIcon(
-      Gdx.graphics.getWidth - IconSize * 2,
-      Gdx.graphics.getHeight - IconSize * 2,
+      Geometry.ScreenWidth - IconSize * 2,
+      Geometry.ScreenHeight - IconSize * 2,
       IconSize,
       Tertis.close,
       () => {

@@ -1,10 +1,9 @@
 package org.merlin.tertis.common
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Rectangle
+import org.merlin.tertis.Geometry
 import org.merlin.tertis.Geometry._
 import org.merlin.tertis.Tertis.pixture
 
@@ -21,12 +20,12 @@ object Frame {
       alpha = (alpha - delta / FadeSpeedSeconds) max 0f
     }
 
-    val offsetY = (OffsetY * alpha).toInt
-    val offsetX = (OffsetX * alpha).toInt
+    val offsetY = OffsetY * alpha
+    val offsetX = OffsetX * alpha
     val width =
-      Gdx.graphics.getWidth * (1f - alpha) + Columns * Dimension * alpha
+      Geometry.ScreenWidth * (1f - alpha) + Columns * Dimension * alpha
     val height =
-      Gdx.graphics.getHeight * (1f - alpha) + Rows * Dimension * alpha
+      Geometry.ScreenHeight * (1f - alpha) + Rows * Dimension * alpha
     frame.set(offsetX, offsetY, width, height)
   }
 
@@ -36,29 +35,29 @@ object Frame {
       pixture,
       0,
       0,
-      graphics.getWidth,
+      Geometry.ScreenWidth,
       frame.y
     )
     batch.draw(
       pixture,
       0,
       frame.y + frame.height,
-      graphics.getWidth,
-      graphics.getHeight - frame.y - frame.height
+      Geometry.ScreenWidth,
+      Geometry.ScreenHeight - frame.y - frame.height
     )
     batch.draw(
       pixture,
       0,
       0,
       frame.x,
-      graphics.getHeight
+      Geometry.ScreenHeight
     )
     batch.draw(
       pixture,
       frame.x + frame.width,
       0,
-      graphics.getWidth - frame.x - frame.width,
-      graphics.getHeight
+      Geometry.ScreenWidth - frame.x - frame.width,
+      Geometry.ScreenHeight
     )
     Starfield.renderOnFrame(batch)
     GreyColour.a = alpha

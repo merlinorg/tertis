@@ -36,7 +36,7 @@ class Player(game: Game) {
             batch,
             loc.block.getColor,
             OffsetX + (loc.column + i) * Dimension,
-            OffsetY + loc.y.toInt + j * Dimension,
+            OffsetY + loc.y.floor + j * Dimension,
             Dimension,
             Dimension,
             Bevel,
