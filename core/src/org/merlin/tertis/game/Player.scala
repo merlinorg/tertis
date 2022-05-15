@@ -52,17 +52,18 @@ class Player(game: Game) {
 
   def update(delta: Float, oldLoc: BlockLoc): Unit = {
     val now = System.currentTimeMillis
+    val block = oldLoc.block
     val fastness =
       game.fast.fold(1f, Prefs.TiltSpeed.fold(tiltSpeed, 0f))
 
     val speedup =
-      1f + game.zenMode.fold(
+      game.zenMode.fold(
         0f,
-        game.score.count.toFloat / 200
-      ) // double speed after 200 pieces = 50 rows, triple speed after 400 etc
+        game.score.count.toFloat / SpeedupRate.toFloat
+      )
     val velocityY = game.gravity.fold(
       GravitySpeed,
-      SlowSpeed + (FastSpeed - SlowSpeed) * fastness * speedup
+      SlowSpeed + (FastSpeed - SlowSpeed) * (fastness + speedup)
     )
     speed += velocityY
 
@@ -80,11 +81,25 @@ class Player(game: Game) {
       .filter(_.timestamp > now - KeyDurationMillis)
       .map(change => (oldLoc.rotation + 4 + change.value) % 4)
 
+    val wallKicks = newRotation
+      .map(newRot => {
+        // > 0 if the rotation sticks out to the left
+        val kickRight =
+          block.firstColumn(oldLoc.rotation) - block.firstColumn(newRot)
+        // < 0 if the rotation sticks out to the right
+        val kickLeft =
+          block.lastColumn(oldLoc.rotation) - block.lastColumn(newRot)
+        ((1 to kickRight) ++ (kickLeft to -1)).map(_ + oldLoc.column).toList
+      })
+      .getOrElse(Nil)
+
+    // Floor kicks are right out.
+
     // search all combinations of shifts rotates and moves, including into any position
     // that we passed on this slide down
     val newLocations = for {
-      column <- optList(newColumn, oldLoc.column)
       rotation <- optList(newRotation, oldLoc.rotation)
+      column <- optList(newColumn, oldLoc.column) ::: wallKicks
       y <- optList(floorY, newY).reverse
     } yield oldLoc.copy(rotation = rotation, column = column, y = y)
 
@@ -92,14 +107,17 @@ class Player(game: Game) {
       case Some(newLoc) =>
         blockOpt = Some(newLoc)
         val shifted = newLoc.column != oldLoc.column
+        val rotated = newLoc.rotation != oldLoc.rotation
         // drop the shift if it's a one-off that succeeded or it's an auto that did not
         game.shift = game.shift.filter(_.auto == shifted)
         if (newLoc.rotation != oldLoc.rotation)
           game.rotate = None // wrong
         if (newLoc.y > newY) { // didn't move full amount so hit something
-          if (touchdown.exists(_ >= GracePeriodSeconds)) {
+          if (
+            !shifted && !rotated && touchdown.exists(_ >= GracePeriodSeconds)
+          ) {
             game.board.drop(
-              newLoc.block,
+              block,
               newLoc.rotation,
               newLoc.column,
               (newLoc.y / Dimension).floor.toInt
@@ -182,6 +200,9 @@ class Player(game: Game) {
 
   // 0f-1f how much to shift the pitch up at the top
   val PitchShift = .1f
+
+  // double speed after 800 pieces = 200 rows, triple speed after 1600 etc
+  val SpeedupRate = 800
 
   val font = new BitmapFont()
 }

@@ -6,6 +6,10 @@ import com.badlogic.gdx.math.MathUtils
 
 trait Test extends ((Int, Int) => Boolean)
 
+/** The symmetric flag causes ---- and _|- to alternate between two positions
+  * instead of truly rotating about a center. Subjective, but I find the true
+  * rotation to be displeasing.
+  */
 final class Block(
     color: Color,
     hcColor: Color,
@@ -33,6 +37,15 @@ final class Block(
     }
     result
   }
+
+  def columnOccupied(rotation: Int, i: Int): Boolean =
+    (0 until size).exists(j => test(rotation, i, j))
+
+  def firstColumn(rotation: Int): Int =
+    (0 until size).find(columnOccupied(rotation, _)).get
+
+  def lastColumn(rotation: Int): Int =
+    (0 until size).findLast(columnOccupied(rotation, _)).get
 
   def exists(rotation: Int, f: (Int, Int) => Boolean): Boolean =
     !forall(rotation, (x, y) => !f(x, y))
@@ -106,8 +119,8 @@ object Block {
       rgb(221, 223, 255),
       """
         |....
-        |....
         |####
+        |....
         |....
         |""".toBlock,
       true
@@ -125,18 +138,18 @@ object Block {
       rgb(165, 255, 221),
       rgb(0, 255, 181),
       """
-        |...
         |###
         |..#
+        |...
         |""".toBlock
     ),
     new Block(
       rgb(255, 255, 139),
       rgb(255, 253, 0),
       """
+        |...
         |##.
         |.##
-        |...
         |""".toBlock,
       true
     ),
@@ -144,9 +157,9 @@ object Block {
       rgb(255, 222, 183),
       rgb(255, 166, 60),
       """
+        |...
         |.##
         |##.
-        |...
         |""".toBlock,
       true
     ),
