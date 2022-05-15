@@ -62,12 +62,12 @@ class GameControl(game: Game) extends InputAdapter {
         } else if (
           (screenY - oldY > 0) && ((oldY - screenY).abs > (oldX - screenX).abs)
         ) { // swipe down
-          if (third == 1) {
-            game.gravity = true
-          } else if (third > 1) {
-            game.rotate = Some(Change.up)
-          } else if (third < 1) {
+          if (third < 1) {
             game.rotate = Some(Change.down)
+          } else if (third < 2) {
+            game.gravity = true
+          } else {
+            game.rotate = Some(Change.up)
           }
         }
       }
