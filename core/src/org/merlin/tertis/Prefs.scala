@@ -48,4 +48,5 @@ object Prefs {
   final val HighContrast = new Pref("highContrast")
   final val TiltSpeed = new Pref("tiltSpeed")
   final val StuffHappens = new Pref("stuffHappens")
+  final val WeakRandomness = new Pref("weakRandomness")
 }

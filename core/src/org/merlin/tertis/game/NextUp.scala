@@ -4,20 +4,30 @@ package game
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import org.merlin.tertis.Geometry._
 
-class NextUp {
-  var previous: Block = Block.random
+class NextUp(game: Game) {
+  private var previous = Option.empty[Block]
   private var previousAlpha = 0f
 
-  private var next: Block = Block.random
+  private var bag = Iterator.empty[Block]
+  private var next: Block = nextBlock
   private var nextAlpha = 0f
 
   def shift(): Block = {
-    previous = next
+    val current = next
+    previous = Some(next)
     previousAlpha = nextAlpha
-    next = Block.random
+    next = nextBlock
     nextAlpha = 0f
-    previous
+    current
   }
+
+  private def nextBlock: Block =
+    if (!game.weakRandomness) {
+      Block.random
+    } else {
+      if (!bag.hasNext) bag = Block.bag
+      bag.next()
+    }
 
   def update(delta: Float): Unit = {
     previousAlpha = (previousAlpha - delta / FadeOutSeconds) max 0f
@@ -25,7 +35,9 @@ class NextUp {
   }
 
   def render(batch: PolygonSpriteBatch): Unit = {
-    draw(batch, previous, previousAlpha, -.5f)
+    previous foreach { prev =>
+      draw(batch, prev, previousAlpha, -.5f)
+    }
     draw(batch, next, nextAlpha, 1f)
   }
 

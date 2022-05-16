@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import org.merlin.tertis.Geometry.Dimension
-import org.merlin.tertis.home.Icon.White
+import org.merlin.tertis.home.Icon._
 import org.merlin.tertis.util.TextureWrapper
 
 trait Icon {
@@ -132,11 +132,13 @@ class KeyIcon(
     val size: Float,
     icon: TextureWrapper,
     rotation: Float,
-    label: String
+    label: String,
+    description: String
 ) extends BaseIcon {
 
   override def draw(batch: PolygonSpriteBatch, alpha: Float): Unit = {
-    batch.setColor(White ⍺ alpha)
+    val color = White ⍺ alpha
+    batch.setColor(color)
     batch.draw(
       icon,
       x - size / 2,
@@ -155,9 +157,18 @@ class KeyIcon(
       false,
       false
     )
-    Text.smallFont.setColor(White ⍺ alpha)
-    val textY = y + Text.smallFont.getAscent
+    Text.smallFont.setColor(color)
+    val textY =
+      y + (Text.smallFont.getLineHeight + Text.tinyFont.getAscent - Text.tinyFont.getDescent) / 2
     Text.smallFont.draw(batch, label, x + size * 1.25f, textY)
+    val grey = Grey ⍺ alpha
+    Text.tinyFont.setColor(grey)
+    Text.tinyFont.draw(
+      batch,
+      description,
+      x + size * 1.25f,
+      textY - Text.smallFont.getLineHeight
+    )
   }
 
   override def clicked(): Unit = ()

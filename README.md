@@ -58,15 +58,15 @@ sdk.dir=/opt/homebrew/share/android-commandlinetools/
 * Achieving greatness:
 
 ```shell
-desktop/build/libs/desktop-1.1.jar
+desktop/build/libs/desktop-x.y.jar
 ```
 
 * Which you can run:
 
 ```shell
-java -jar desktop/build/libs/desktop-1.1.jar
+java -jar desktop/build/libs/desktop-x.y.jar
 # or, on a Mac
-java -XstartOnFirstThread -jar desktop/build/libs/desktop-1.1.jar
+java -XstartOnFirstThread -jar desktop/build/libs/desktop-x.y.jar
 ```
 
 ### Packaging for a Mac
@@ -80,15 +80,15 @@ export JAVA_HOME=/path/to/java/17
 jpackage \
   --input desktop/build/libs/ \
   --name Tertis \
-  --app-version 1.1 \
-  --main-jar desktop-1.1.jar \
+  --app-version x.y \
+  --main-jar desktop-x.y.jar \
   --main-class org.merlin.tertis.DesktopLauncher \
   --type dmg \
   --java-options '-XstartOnFirstThread' \
   --icon mac/Tertis.icns
 ```
 
-Yielding: `Tertis-1.1.dmg`.
+Yielding: `Tertis-x.y.dmg`.
 
 ## Building for Android
 

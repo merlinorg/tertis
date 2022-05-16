@@ -4,7 +4,6 @@ package game
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import org.merlin.tertis.Geometry._
-import org.merlin.tertis.home.Icon.White
 import org.merlin.tertis.{Prefs, Tertis}
 
 import scala.collection.mutable
@@ -102,14 +101,15 @@ class Board(game: Game) {
         val region = board(j * Columns + i)
         if (region ne null) {
           Red.a = 1f - redAlpha // fade through red to invisible
-          val color =
-            if (ending || region.dead)
-              region.color.cpy.lerp(Red, redAlpha * redAlpha)
-            else if (flash.contains(region.identifier) && flashdown > 0)
+          val baseColor =
+            (flash.contains(region.identifier) && flashdown > 0).fold(
               region.color.cpy
-                .lerp(Color.WHITE, flashdown)
-            else
+                .lerp(Color.WHITE, flashdown),
               region.color
+            )
+          val color =
+            (ending || region.dead)
+              .fold(baseColor.cpy.lerp(Red, redAlpha * redAlpha), baseColor)
           BlockRenderer.render(
             batch,
             color,
@@ -211,5 +211,5 @@ object Board {
   private val Red = new Color(1, 0, 0, 1f) // nb: mutates
   val RedFadeSeconds = .5f
   val RedShiftAccelerationSeconds = .5f
-  val FlashdownSeconds = 0.3f
+  val FlashdownSeconds = 0.5f
 }

@@ -69,10 +69,9 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
     Frame.render(batch)
   }
 
-  private val DesktopIconLeft = Dimension * 3
-  private val DesktopIconInterval = IconSize * 2
-  private val DesktopIconsTop =
-    ((Geometry.ScreenHeight + (DesktopIconInterval * 4 + IconSize)) / 2).floor
+  private val DesktopIconLeft = IconSize * 2
+  private val DesktopIconInterval = IconSize * 3
+  private val DesktopIconsTop = Geometry.ScreenHeight - IconSize * 5
 
   val desktopIcons: List[Icon] = List(
     new KeyIcon(
@@ -81,7 +80,8 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
       IconSize,
       Tertis.arrowKey,
       0f,
-      "Right"
+      "Right",
+      "Right arrow key"
     ),
     new KeyIcon(
       DesktopIconLeft,
@@ -89,7 +89,8 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
       IconSize,
       Tertis.arrowKey,
       180f,
-      "Left"
+      "Left",
+      "Left arrow key"
     ),
     new KeyIcon(
       DesktopIconLeft,
@@ -97,7 +98,8 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
       IconSize,
       Tertis.arrowKey,
       90f,
-      "Rotate"
+      "Rotate",
+      "Up arrow key"
     ),
     new KeyIcon(
       DesktopIconLeft,
@@ -105,7 +107,8 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
       IconSize,
       Tertis.arrowKey,
       270f,
-      "Drop"
+      "Drop",
+      "Down arrow key"
     ),
     new KeyIcon(
       DesktopIconLeft,
@@ -113,7 +116,8 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
       IconSize,
       Tertis.metaKey,
       0f,
-      "Velocitator"
+      "Velocitator",
+      "Shift/control/alt/option key"
     )
   )
 

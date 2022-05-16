@@ -12,10 +12,11 @@ class Game extends Scene {
   var state: State = PlayingState
 
   val zenMode: Boolean = Prefs.ZenMode.isTrue
-  var stuffHappens: Boolean = Prefs.StuffHappens.isTrue
+  val stuffHappens: Boolean = Prefs.StuffHappens.isTrue
+  val weakRandomness: Boolean = Prefs.WeakRandomness.isTrue
 
   val board: Board = new Board(this)
-  val nextUp: NextUp = new NextUp
+  val nextUp: NextUp = new NextUp(this)
   var player: Player = new Player(this)
   val score: Score = new Score
   var fast: Boolean = false

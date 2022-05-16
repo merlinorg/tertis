@@ -61,6 +61,14 @@ class Settings(home: Home) extends Scene {
       "High contrast",
       "More vivid colours."
     ),
+    new CheckIcon(
+      IconSize * 2,
+      IconTop - IconSpacing * 3,
+      IconSize,
+      Prefs.WeakRandomness,
+      "Weak randomness",
+      "Bind the hands of fate."
+    ),
   )
 
   override def init(): SettingsControl =

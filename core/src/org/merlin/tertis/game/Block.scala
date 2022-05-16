@@ -4,6 +4,9 @@ package game
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils
 
+import scala.collection.mutable
+import scala.util.Random
+
 trait Test extends ((Int, Int) => Boolean)
 
 /** The symmetric flag causes ---- and _|- to alternate between two positions
@@ -88,6 +91,9 @@ object Block {
   final val Solid = '#'
 
   def random: Block = blocks(randomNumber(blocks.length))
+
+  def bag: Iterator[Block] =
+    Random.shuffle(blocks).iterator
 
   // I question the randomness of MathUtils.random for 7
   private def randomNumber(n: Int): Int = {
