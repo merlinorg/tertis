@@ -3,6 +3,7 @@ package game
 
 import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.Input.Peripheral
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.{BitmapFont, PolygonSpriteBatch}
 import org.merlin.tertis.Geometry._
 import org.merlin.tertis.Tertis
@@ -30,12 +31,16 @@ class Player(game: Game) {
 
   def draw(batch: PolygonSpriteBatch): Unit = {
     blockOpt foreach { loc =>
+      val blockColour = loc.block.getColor
+      val colour = touchdown.fold(blockColour)(td =>
+        blockColour.cpy.lerp(Color.WHITE, td / GracePeriodSeconds * .75f) // only go to 75%
+      )
       loc.block.eachSquare(
         loc.rotation,
         (i, j, test) =>
           BlockRenderer.render(
             batch,
-            loc.block.getColor,
+            colour,
             OffsetX + (loc.column + i) * Dimension,
             OffsetY + loc.y.floor + j * Dimension,
             Dimension,

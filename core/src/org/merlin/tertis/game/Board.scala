@@ -4,6 +4,7 @@ package game
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import org.merlin.tertis.Geometry._
+import org.merlin.tertis.home.Icon.White
 import org.merlin.tertis.{Prefs, Tertis}
 
 import scala.collection.mutable
@@ -38,6 +39,8 @@ class Board(game: Game) {
   // if a row drop has two pieces to it, the length of the first run
   var firstChunk: Int = 0
   var ending: Boolean = false
+  private val flash = mutable.Set.empty[Int]
+  private var flashdown = 0f
 
 //    val reg = Region(Color.ROYAL)
 //    for (j <- 0 until 20 * Columns) if (j % Columns > 0) board.update(j, reg)
@@ -47,6 +50,7 @@ class Board(game: Game) {
   def ended: Boolean = redShift >= BoardRows
 
   def update(delta: Float): Unit = {
+    flashdown = flashdown.alphaDown(delta, FlashdownSeconds)
     if (ending) {
       redAlpha = redAlpha.alphaUp(delta, RedFadeSeconds)
       redVelocity = redVelocity + delta / RedShiftAccelerationSeconds
@@ -101,7 +105,11 @@ class Board(game: Game) {
           val color =
             if (ending || region.dead)
               region.color.cpy.lerp(Red, redAlpha * redAlpha)
-            else region.color
+            else if (flash.contains(region.identifier) && flashdown > 0)
+              region.color.cpy
+                .lerp(Color.WHITE, flashdown)
+            else
+              region.color
           BlockRenderer.render(
             batch,
             color,
@@ -135,6 +143,9 @@ class Board(game: Game) {
       row: Int
   ): Unit = {
     val region = Region(block.getColor)
+    flash.clear()
+    flash.add(region.identifier)
+    flashdown = 1f
     block.foreach(
       rotation,
       (i, j) => set(column + i, row + j, region)
@@ -159,11 +170,14 @@ class Board(game: Game) {
       if (drop || dropping != drop) {
         for (i <- 0 until Columns) {
           val region = get(i, j)
-          if (region ne null)
-            regionMap.getOrElseUpdate(
+          if (region ne null) {
+            val newRegion = regionMap.getOrElseUpdate(
               region.identifier,
               Region(region.color, drop)
             )
+            if (flash.contains(region.identifier))
+              flash.add(newRegion.identifier)
+          }
         }
         dropping = drop
       }
@@ -197,4 +211,5 @@ object Board {
   private val Red = new Color(1, 0, 0, 1f) // nb: mutates
   val RedFadeSeconds = .5f
   val RedShiftAccelerationSeconds = .5f
+  val FlashdownSeconds = 0.3f
 }
