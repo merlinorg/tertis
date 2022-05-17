@@ -3,31 +3,33 @@ package org.merlin.tertis
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.graphics.g2d.{BitmapFont, GlyphLayout, PolygonSpriteBatch}
+import com.badlogic.gdx.graphics.g2d.{
+  BitmapFont,
+  GlyphLayout,
+  PolygonSpriteBatch
+}
 import org.merlin.tertis.Geometry.Dimension
 import org.merlin.tertis.home.Home
+import org.merlin.tertis.util.GarbageCan
 
 object Text {
-  def loadFonts(): Unit = {
+  def loadFonts()(implicit garbage: GarbageCan): Unit = {
     val generator = new FreeTypeFontGenerator(
       Gdx.files.internal("OpenSans-Regular.ttf")
     )
     val parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
     parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + CharExtras
-    parameter.size = Dimension.toInt
-    bigFont = generator.generateFont(parameter)
     parameter.size = (Dimension * 3 / 4).toInt
-    mediumFont = generator.generateFont(parameter)
+    mediumFont = garbage.add(generator.generateFont(parameter))
     parameter.size = (Dimension * 9 / 16).toInt
-    smallFont = generator.generateFont(parameter)
+    smallFont = garbage.add(generator.generateFont(parameter))
     parameter.size = (Dimension * 3 / 8).toInt
-    tinyFont = generator.generateFont(parameter)
+    tinyFont = garbage.add(generator.generateFont(parameter))
     generator.dispose()
   }
 
   private val CharExtras = Home.Title
 
-  var bigFont: BitmapFont = _
   var mediumFont: BitmapFont = _
   var smallFont: BitmapFont = _
   var tinyFont: BitmapFont = _

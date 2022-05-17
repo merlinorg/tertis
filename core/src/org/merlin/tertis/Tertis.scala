@@ -9,19 +9,21 @@ import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.{ApplicationAdapter, Gdx, Input}
 import org.merlin.tertis.common.Starfield
 import org.merlin.tertis.home.Home
-import org.merlin.tertis.util.TextureWrapper
+import org.merlin.tertis.util.{GarbageCan, TextureWrapper}
 
 class Tertis extends ApplicationAdapter {
+  import Tertis.garbage
 
   private var batch: PolygonSpriteBatch = _
   private var scene: Scene = _
 
   override def create(): Unit = {
+
     Gdx.input.setCatchKey(Input.Keys.BACK, true)
 
     Prefs.loadPreferences()
 
-    batch = new PolygonSpriteBatch()
+    batch = garbage.add(new PolygonSpriteBatch())
 
     Tertis.logo = TextureWrapper.load("logo.png")
     Tertis.play = TextureWrapper.load("play.png")
@@ -47,12 +49,12 @@ class Tertis extends ApplicationAdapter {
     Tertis.metaKey =
       TextureWrapper.load("meta-key.png") // linear filter doesn't help
 
-    Tertis.click = Gdx.audio.newSound(Gdx.files.internal("click.mp3"))
-    Tertis.drop = Gdx.audio.newSound(Gdx.files.internal("drop.mp3"))
-    Tertis.crash = Gdx.audio.newSound(Gdx.files.internal("crash.mp3"))
-    Tertis.end = Gdx.audio.newSound(Gdx.files.internal("triangle.mp3"))
+    Tertis.click = Tertis.loadSound("click.mp3")
+    Tertis.drop = Tertis.loadSound("drop.mp3")
+    Tertis.crash = Tertis.loadSound("crash.mp3")
+    Tertis.end = Tertis.loadSound("triangle.mp3")
 
-    // TODO: dispose of everything
+    Tertis.pixture = Tertis.solidTexture(1f, 1f, 1f, 1f)
 
     Text.loadFonts()
 
@@ -71,7 +73,7 @@ class Tertis extends ApplicationAdapter {
   }
 
   override def dispose(): Unit = {
-    batch.dispose()
+    garbage.dispose()
   }
 
   private def setScene(newScene: Scene): Unit = {
@@ -82,6 +84,8 @@ class Tertis extends ApplicationAdapter {
 }
 
 object Tertis {
+  implicit val garbage: GarbageCan = new GarbageCan
+
   var logo: TextureWrapper = _
   var play: TextureWrapper = _
 
@@ -105,6 +109,8 @@ object Tertis {
   var arrowKey: TextureWrapper = _
   var metaKey: TextureWrapper = _
 
+  var pixture: Texture = _
+
   var click: Sound = _
   var drop: Sound = _
   var crash: Sound = _
@@ -115,12 +121,15 @@ object Tertis {
   private def isMobile(tpe: ApplicationType) =
     tpe == ApplicationType.Android || tpe == ApplicationType.iOS
 
-  val pixture = solidTexture(1f, 1f, 1f, 1f)
+  private def loadSound(path: String)(implicit garbage: GarbageCan): Sound =
+    garbage.add(Gdx.audio.newSound(Gdx.files.internal(path)))
 
-  def solidTexture(r: Float, g: Float, b: Float, a: Float): Texture = {
+  private def solidTexture(r: Float, g: Float, b: Float, a: Float)(implicit
+      garbage: GarbageCan
+  ): Texture = {
     val pixel = new Pixmap(1, 1, Format.RGBA8888)
     pixel.setColor(r, g, b, a)
     pixel.fill()
-    new Texture(pixel)
+    garbage.add(new Texture(pixel))
   }
 }

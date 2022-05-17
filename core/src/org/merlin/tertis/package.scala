@@ -81,6 +81,7 @@ package object tertis {
   }
 
   implicit class ColorOps(val self: Color) extends AnyVal {
+
     /** Returns a new colour with alpha set to [alpha]. */
     def withAlpha(alpha: Float): Color =
       new Color(self.r, self.g, self.b, alpha)

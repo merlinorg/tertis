@@ -1,15 +1,17 @@
-package org.merlin.tertis.util
+package org.merlin.tertis
+package util
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.{Pixmap, Texture}
+import com.badlogic.gdx.utils.Disposable
 
-class TextureWrapper(val pixmap: Pixmap) {
+class TextureWrapper(val pixmap: Pixmap) extends Disposable {
 
-  val width = pixmap.getWidth
-  val height = pixmap.getHeight
+  val width: Int = pixmap.getWidth
+  val height: Int = pixmap.getHeight
   val texture = new Texture(pixmap)
 
-  def dispose(): Unit = {
+  override def dispose(): Unit = {
     texture.dispose()
     pixmap.dispose()
   }
@@ -17,10 +19,10 @@ class TextureWrapper(val pixmap: Pixmap) {
 }
 
 object TextureWrapper {
-  def load(path: String): TextureWrapper = {
+  def load(path: String)(implicit garbageCan: GarbageCan): TextureWrapper = {
     val fileHandle = Gdx.files.internal(path)
     val pixmap = new Pixmap(fileHandle)
-    new TextureWrapper(pixmap)
+    garbageCan.add(new TextureWrapper(pixmap))
   }
 
   implicit def toTexture(wrapper: TextureWrapper): Texture = wrapper.texture
