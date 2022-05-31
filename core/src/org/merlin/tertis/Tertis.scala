@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application.ApplicationType
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Pixmap.Format
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
+import com.badlogic.gdx.graphics.glutils.PixmapTextureData
 import com.badlogic.gdx.graphics.{Pixmap, Texture}
 import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.{ApplicationAdapter, Gdx, Input}
@@ -130,6 +131,7 @@ object Tertis {
     val pixel = new Pixmap(1, 1, Format.RGBA8888)
     pixel.setColor(r, g, b, a)
     pixel.fill()
-    garbage.add(new Texture(pixel))
+    val td = new PixmapTextureData(pixel, null, false, true)
+    garbage.add(new Texture(td))
   }
 }
