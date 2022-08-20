@@ -57,9 +57,9 @@ class Settings(home: Home) extends Scene {
       IconSize * 2,
       IconTop - IconSpacing * 2,
       IconSize,
-      Prefs.HighContrast,
-      "High contrast",
-      "More vivid colours."
+      Prefs.LowContrast,
+      "Low contrast",
+      "More bland colours."
     ),
     new CheckIcon(
       IconSize * 2,

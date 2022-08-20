@@ -21,14 +21,14 @@ final class Block(
 ) {
   import Block.Solid
 
-  def getColor: Color = Prefs.HighContrast.fold(hcColor, color)
+  def getColor: Color = Prefs.LowContrast.fold(color, hcColor)
 
   assert(bits.forall(_.length == bits.length), bits.mkString(","))
 
   val size: Int = bits.length
 
-  val vOffset = bits.reverse.takeWhile(!_.contains(Solid)).length
-  val vWidth = bits.count(_.contains(Solid))
+  val vOffset: Int = bits.reverse.takeWhile(!_.contains(Solid)).length
+  val vWidth: Int = bits.count(_.contains(Solid))
 
   def forall(rotation: Int, f: (Int, Int) => Boolean): Boolean = {
     var result = true

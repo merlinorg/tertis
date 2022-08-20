@@ -45,7 +45,7 @@ object Prefs {
   final val MuteAudio = new Pref("muteAudio")
   final val MuteMusic = new Pref("muteMusic")
   final val ZenMode = new Pref("zenMode")
-  final val HighContrast = new Pref("highContrast")
+  final val LowContrast = new Pref("lowContrast")
   final val TiltSpeed = new Pref("tiltSpeed")
   final val StuffHappens = new Pref("stuffHappens")
   final val WeakRandomness = new Pref("weakRandomness")
