@@ -29,7 +29,7 @@ class Home(paused: Option[Game] = None) extends Scene {
   private val IconSpacing = IconMargin + IconSize
 
   private val HighScoreSize =
-    Text.smallFont.getLineHeight + Text.tinyFont.getLineHeight
+    Text.smallFont.getLineHeight * 2 + Text.tinyFont.getLineHeight
   private val LogoWidth = (Geometry.ScreenWidth * 2 / 3).floor
 
   private val FooterMargin =
@@ -97,6 +97,7 @@ class Home(paused: Option[Game] = None) extends Scene {
   override def init(): HomeControl = {
     state = HomeState
     Frame.targetAlpha = 0f
+    ScoreIO.loadScore()
     new HomeControl(this)
   }
 
@@ -140,6 +141,14 @@ class Home(paused: Option[Game] = None) extends Scene {
         time <- Prefs.HighTime.intValue
       } drawHighScore(batch, score, time)
     }
+    Text.draw(
+      batch,
+      Text.tinyFont,
+      Color.DARK_GRAY ⍺ (.25f * playAlpha),
+      s"v${Tertis.version}",
+      l =>
+        (Geometry.ScreenWidth - l.width - Geometry.Dimension / 4) -> (l.height + Geometry.Dimension / 4)
+    )
 
     Frame.render(batch)
   }
@@ -189,6 +198,22 @@ class Home(paused: Option[Game] = None) extends Scene {
       time.seconds.toHumanString,
       FooterMargin + HighScoreSize - Text.smallFont.getLineHeight
     )
+    if (Tertis.globalHigh > 0) {
+      Text.draw(
+        batch,
+        Text.smallFont,
+        color,
+        f"All Time: ${Tertis.globalHigh}%,d",
+        FooterMargin + HighScoreSize - Text.smallFont.getLineHeight - Text.tinyFont.getLineHeight * 2
+      )
+      Text.draw(
+        batch,
+        Text.tinyFont,
+        color,
+        Tertis.globalTime.seconds.toHumanString,
+        FooterMargin + HighScoreSize - Text.smallFont.getLineHeight * 2 - Text.tinyFont.getLineHeight * 2
+      )
+    }
   }
 
   def play(): Unit = {

@@ -12,6 +12,8 @@ import org.merlin.tertis.common.Starfield
 import org.merlin.tertis.home.Home
 import org.merlin.tertis.util.{GarbageCan, TextureWrapper}
 
+import java.util.Properties
+
 class Tertis extends ApplicationAdapter {
   import Tertis.garbage
 
@@ -25,6 +27,15 @@ class Tertis extends ApplicationAdapter {
     Prefs.loadPreferences()
 
     batch = garbage.add(new PolygonSpriteBatch())
+
+    val properties = new Properties
+    val is = Tertis.getClass.getResourceAsStream("/app.properties")
+    if (is ne null) {
+      properties.load(is)
+      is.close()
+    }
+    Tertis.version = properties.getProperty("version", "Unknown")
+    Tertis.key = properties.getProperty("key", "unset")
 
     Tertis.logo = TextureWrapper.load("logo.png")
     Tertis.play = TextureWrapper.load("play.png")
@@ -87,6 +98,9 @@ class Tertis extends ApplicationAdapter {
 object Tertis {
   implicit val garbage: GarbageCan = new GarbageCan
 
+  var version: String = _
+  var key: String = _
+
   var logo: TextureWrapper = _
   var play: TextureWrapper = _
 
@@ -116,6 +130,9 @@ object Tertis {
   var drop: Sound = _
   var crash: Sound = _
   var end: Sound = _
+
+  var globalHigh: Long = _
+  var globalTime: Int = _
 
   def mobile: Boolean = isMobile(Gdx.app.getType)
 

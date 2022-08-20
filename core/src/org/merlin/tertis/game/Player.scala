@@ -33,7 +33,8 @@ class Player(game: Game) {
     blockOpt foreach { loc =>
       val blockColour = loc.block.getColor
       val colour = touchdown.fold(blockColour)(td =>
-        blockColour.cpy.lerp(Color.WHITE, td / GracePeriodSeconds * .75f) // only go to 75%
+        blockColour.cpy
+          .lerp(Color.WHITE, td / GracePeriodSeconds * .75f) // only go to 75%
       )
       loc.block.eachSquare(
         loc.rotation,
@@ -156,6 +157,7 @@ class Player(game: Game) {
           Tertis.end.play(1f)
         game.score.recordHighScore()
         game.state = Game.LostState
+        ScoreIO.saveScore(game.score)
 
     }
   }

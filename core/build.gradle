@@ -16,9 +16,28 @@ compileScala {
 
 //sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.scala.srcDirs = [ "src/" ]
+sourceSets.main.resources.srcDirs = [ "res/" ]
 
 eclipse.project.name = appName + "-core"
 
 dependencies {
     implementation 'org.scala-lang:scala-library:2.13.8'
+}
+
+def postKey
+
+def localProperties = project.file("../local.properties")
+
+if (localProperties.exists()) {
+    Properties properties = new Properties()
+    localProperties.withInputStream { instr ->
+        properties.load(instr)
+        postKey = properties.getProperty('post.key')
+    }
+}
+
+processResources {
+    filesMatching("*.properties") {
+        expand(version: version, key: postKey)
+    }
 }
