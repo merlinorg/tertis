@@ -27,6 +27,7 @@ compileScala {
 
 dependencies {
     implementation 'org.scala-lang:scala-library:2.13.8'
+    implementation "com.github.crykn.guacamole:gdx-desktop:$guacamoleVersion"
 }
 
 sourceSets.main.scala.srcDirs = ["src/"]
@@ -35,7 +36,6 @@ sourceSets.main.resources.srcDirs = ["../assets"]
 project.ext.mainClassName = "org.merlin.tertis.DesktopLauncher"
 project.ext.assetsDir = new File("../assets")
 
-import org.gradle.internal.os.OperatingSystem
 
 task run(dependsOn: classes, type: JavaExec) {
     mainClass = project.mainClassName
@@ -44,10 +44,13 @@ task run(dependsOn: classes, type: JavaExec) {
     workingDir = project.assetsDir
     ignoreExitValue = true
 
-    if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
-        // Required to run on macOS
-        jvmArgs += "-XstartOnFirstThread"
-    }
+// No longer needed w/ guacamole.
+//
+//  import org.gradle.internal.os.OperatingSystem
+//  if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
+//      // Required to run on macOS
+//      jvmArgs += "-XstartOnFirstThread"
+//  }
 }
 
 task debug(dependsOn: classes, type: JavaExec) {

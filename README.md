@@ -2,7 +2,7 @@
   <img src="assets/logo.png" alt="Raised fist holding a one-by-four" width="256" />
 </p>
 
-# Tertis
+# Тэятис
 
 A [libgdx](https://libgdx.com/) game written, while briefly under the weather,
 in [Scala](https://www.scala-lang.org/), the premier programming language
