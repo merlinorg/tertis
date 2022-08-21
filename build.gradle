@@ -21,7 +21,7 @@ buildscript {
 allprojects {
     apply plugin: "eclipse"
 
-    version = '1.4'
+    version = '1.5'
     ext {
         appName = "run"
         gdxVersion = '1.11.0'
