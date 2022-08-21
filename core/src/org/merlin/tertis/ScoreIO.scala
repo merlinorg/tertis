@@ -100,7 +100,7 @@ class ScoreListener extends IOListener("loadScore") {
   override def handleHttpResponse(httpResponse: Net.HttpResponse): Unit =
     httpResponse.getResultAsString match {
       case ScoreRE(score, time) =>
-        Tertis.globalHigh = score.toLong
+        Tertis.globalHigh = score.toInt
         Tertis.globalTime = time.toInt
       case _ =>
     }

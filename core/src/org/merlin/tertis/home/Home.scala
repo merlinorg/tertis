@@ -199,19 +199,15 @@ class Home(paused: Option[Game] = None) extends Scene {
       FooterMargin + HighScoreSize - Text.smallFont.getLineHeight
     )
     if (Tertis.globalHigh > 0) {
-      Text.draw(
-        batch,
-        Text.smallFont,
-        color,
-        f"All Time: ${Tertis.globalHigh}%,d",
-        FooterMargin + HighScoreSize - Text.smallFont.getLineHeight - Text.tinyFont.getLineHeight * 2
-      )
+      val (allScore, allTime) =
+        if (score > Tertis.globalHigh) (score -> time)
+        else (Tertis.globalHigh -> Tertis.globalTime)
       Text.draw(
         batch,
         Text.tinyFont,
         color,
-        Tertis.globalTime.seconds.toHumanString,
-        FooterMargin + HighScoreSize - Text.smallFont.getLineHeight * 2 - Text.tinyFont.getLineHeight * 2
+        f"All Time: $allScore%,d in " + allTime.seconds.toHumanString,
+        (FooterMargin + HighScoreSize - Text.smallFont.getLineHeight + Text.tinyFont.getLineHeight) / 2
       )
     }
   }

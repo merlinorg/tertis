@@ -131,7 +131,7 @@ object Tertis {
   var crash: Sound = _
   var end: Sound = _
 
-  var globalHigh: Long = _
+  var globalHigh: Int = _
   var globalTime: Int = _
 
   def mobile: Boolean = isMobile(Gdx.app.getType)

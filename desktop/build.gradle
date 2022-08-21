@@ -36,6 +36,7 @@ sourceSets.main.resources.srcDirs = ["../assets"]
 project.ext.mainClassName = "org.merlin.tertis.DesktopLauncher"
 project.ext.assetsDir = new File("../assets")
 
+import org.gradle.internal.os.OperatingSystem
 
 task run(dependsOn: classes, type: JavaExec) {
     mainClass = project.mainClassName
@@ -44,13 +45,10 @@ task run(dependsOn: classes, type: JavaExec) {
     workingDir = project.assetsDir
     ignoreExitValue = true
 
-// No longer needed w/ guacamole.
-//
-//  import org.gradle.internal.os.OperatingSystem
-//  if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
-//      // Required to run on macOS
-//      jvmArgs += "-XstartOnFirstThread"
-//  }
+    if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
+        // Required to run on macOS.. No longer necessary with Guacamole but saves a fork.
+        jvmArgs += "-XstartOnFirstThread"
+    }
 }
 
 task debug(dependsOn: classes, type: JavaExec) {
