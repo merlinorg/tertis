@@ -3,6 +3,7 @@ package org.merlin.tertis
 import com.badlogic.gdx.{Gdx, Preferences}
 
 import java.util.UUID
+import scala.compiletime.uninitialized
 
 class Pref(key: String) {
   import Prefs.preferences
@@ -39,7 +40,7 @@ class Pref(key: String) {
 }
 
 object Prefs {
-  var preferences: Preferences = _
+  var preferences: Preferences = uninitialized
 
   def loadPreferences(): Unit = {
     preferences = Gdx.app.getPreferences("tertis")

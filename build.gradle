@@ -11,9 +11,10 @@ buildscript {
     dependencies {
         classpath 'org.wisepersist:gwt-gradle-plugin:1.1.16'
         classpath 'org.gretty:gretty:3.0.7'
-        classpath 'com.android.tools.build:gradle:8.6.0-alpha07'
         // IntelliJ 2024.2.5 doesn't support 8.8
         // https://mvnrepository.com/artifact/com.android.tools.build/gradle?repo=google
+        classpath 'com.android.tools.build:gradle:8.6.0-alpha07'
+        classpath 'com.android.tools:r8:8.7.18'
     }
 }
 
@@ -21,7 +22,7 @@ buildscript {
 allprojects {
     apply plugin: "eclipse"
 
-    version = '1.5'
+    version = '1.6'
     ext {
         appName = "tertis"
         gdxVersion = '1.13.1'

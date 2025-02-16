@@ -98,8 +98,9 @@ object Block {
   // I question the randomness of MathUtils.random for 7
   private def randomNumber(n: Int): Int = {
     if (n == 7) {
-      var rnd: Int = 0
-      do rnd = MathUtils.random.nextInt >>> 29 while (rnd >= n)
+      var rnd: Int = n
+      while rnd >= n do
+        rnd = MathUtils.random.nextInt >>> 29
       rnd
     } else {
       MathUtils.random(n - 1)

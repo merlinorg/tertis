@@ -5,15 +5,18 @@
 # Тэятис
 
 A [libgdx](https://libgdx.com/) game written, while briefly under the weather,
-in [Scala](https://www.scala-lang.org/), the premier programming language
+in [Scala 3](https://www.scala-lang.org/), the premier programming language
 for contemporary mobile and game development. Based loosely on a
 [prior thing](https://www.youtube.com/watch?v=YYGulsgO-os).
 
 The code is horrid and shameful. It contains state and mutation, inconsistencies,
 aberrations and general travesties. Nothing is nice here.
 
-At the time of writing this was built with JDK 17, Scala 2.13.8, libgdx 1.11.0
-and Android SDK 29.
+At the time of writing this was built with JDK 21, Scala 3.6.3, libgdx 1.13.1
+and Android SDK 36.
+
+The following Android SDK instructions may be out of date, it is not clear what
+updates have happened since they were written.
 
 ## Install the Android SDK command-line tools
 
@@ -73,10 +76,10 @@ java -XstartOnFirstThread -jar desktop/build/libs/desktop-x.y.jar
 
 On the Mac you need an icon. See [this answer](https://stackoverflow.com/a/20703594) for incantations.
 
-With this and JDK 17 installed:
+With this and JDK 21 installed:
 
 ```shell
-export JAVA_HOME=/path/to/java/17
+export JAVA_HOME=/path/to/java/21
 jpackage \
   --input desktop/build/libs/ \
   --name Tertis \
@@ -120,7 +123,7 @@ android/build/outputs/apk/release/android-release.apk
 ### Running in the Android emulator
 
 It's probably easiest to just fire up IntelliJ, select the android run configuration, use the
-AVD Manager UI to create a Pixel 5 device running Android 11 and be done.
+AVD Manager UI to create a Pixel 8 device running Android 14 and be done.
 
 
 ## License

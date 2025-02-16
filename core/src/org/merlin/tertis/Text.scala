@@ -3,14 +3,12 @@ package org.merlin.tertis
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.graphics.g2d.{
-  BitmapFont,
-  GlyphLayout,
-  PolygonSpriteBatch
-}
+import com.badlogic.gdx.graphics.g2d.{BitmapFont, GlyphLayout, PolygonSpriteBatch}
 import org.merlin.tertis.Geometry.Dimension
 import org.merlin.tertis.home.Home
 import org.merlin.tertis.util.GarbageCan
+
+import scala.compiletime.uninitialized
 
 object Text {
   def loadFonts()(implicit garbage: GarbageCan): Unit = {
@@ -30,9 +28,9 @@ object Text {
 
   private val CharExtras = Home.Title
 
-  var mediumFont: BitmapFont = _
-  var smallFont: BitmapFont = _
-  var tinyFont: BitmapFont = _
+  var mediumFont: BitmapFont = uninitialized
+  var smallFont: BitmapFont = uninitialized
+  var tinyFont: BitmapFont = uninitialized
 
   def draw(
       batch: PolygonSpriteBatch,

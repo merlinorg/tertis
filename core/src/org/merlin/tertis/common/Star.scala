@@ -8,7 +8,7 @@ case class Star(
     location: Vector3
 ) {
   import Star._
-  var x, y, z: Float = _
+  var x, y, z: Float = 0
 
   def update(translation: Vector3, rotation: Quaternion): Boolean = {
     location.add(translation)

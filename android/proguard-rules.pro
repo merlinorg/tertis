@@ -29,6 +29,9 @@
 
 -dontwarn java.lang.ClassValue
 
+-keep class com.badlogic.gdx.graphics.g2d.GlyphLayout
+-keep class com.badlogic.gdx.graphics.g2d.GlyphLayout$GlyphRun
+
 # Required if using Gdx-Controllers extension
 -keep class com.badlogic.gdx.controllers.android.AndroidControllers
 

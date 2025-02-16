@@ -13,14 +13,15 @@ import org.merlin.tertis.home.Home
 import org.merlin.tertis.util.{GarbageCan, TextureWrapper}
 
 import java.util.Properties
+import scala.compiletime.uninitialized
 
-class Tertis extends ApplicationAdapter {
+class Tertis extends ApplicationAdapter:
   import Tertis.garbage
 
-  private var batch: PolygonSpriteBatch = _
-  private var scene: Scene = _
+  private var batch: PolygonSpriteBatch = uninitialized
+  private var scene: Scene = uninitialized
 
-  override def create(): Unit = {
+  override def create(): Unit =
 
     Gdx.input.setCatchKey(Input.Keys.BACK, true)
 
@@ -30,10 +31,10 @@ class Tertis extends ApplicationAdapter {
 
     val properties = new Properties
     val is = Tertis.getClass.getResourceAsStream("/app.properties")
-    if (is ne null) {
+    if is ne null then
       properties.load(is)
       is.close()
-    }
+
     Tertis.version = properties.getProperty("version", "Unknown")
     Tertis.key = properties.getProperty("key", "unset")
 
@@ -71,9 +72,8 @@ class Tertis extends ApplicationAdapter {
     Text.loadFonts()
 
     setScene(new Home)
-  }
 
-  override def render(): Unit = {
+  override def render(): Unit =
     val delta = Gdx.graphics.getDeltaTime
     Starfield.update(delta)
     scene.update(delta) foreach setScene
@@ -82,57 +82,53 @@ class Tertis extends ApplicationAdapter {
     Starfield.render(batch)
     scene.render(batch)
     batch.end()
-  }
 
-  override def dispose(): Unit = {
+  override def dispose(): Unit =
     garbage.dispose()
-  }
 
-  private def setScene(newScene: Scene): Unit = {
+  private def setScene(newScene: Scene): Unit =
     scene = newScene
     Gdx.input.setInputProcessor(scene.init())
-  }
 
-}
 
-object Tertis {
+object Tertis:
   implicit val garbage: GarbageCan = new GarbageCan
 
-  var version: String = _
-  var key: String = _
+  var version: String = uninitialized
+  var key: String = uninitialized
 
-  var logo: TextureWrapper = _
-  var play: TextureWrapper = _
+  var logo: TextureWrapper = uninitialized
+  var play: TextureWrapper = uninitialized
 
-  var separator: TextureWrapper = _
-  var tap: TextureWrapper = _
-  var swipeLeft: TextureWrapper = _
-  var swipeRight: TextureWrapper = _
-  var swipeDown: TextureWrapper = _
-  var swipeUpDown: TextureWrapper = _
+  var separator: TextureWrapper = uninitialized
+  var tap: TextureWrapper = uninitialized
+  var swipeLeft: TextureWrapper = uninitialized
+  var swipeRight: TextureWrapper = uninitialized
+  var swipeDown: TextureWrapper = uninitialized
+  var swipeUpDown: TextureWrapper = uninitialized
 
-  var soundOff: TextureWrapper = _
-  var soundOn: TextureWrapper = _
-  var musicOff: TextureWrapper = _
-  var musicOn: TextureWrapper = _
-  var help: TextureWrapper = _
-  var settings: TextureWrapper = _
-  var close: TextureWrapper = _
-  var checkOn: TextureWrapper = _
-  var checkOff: TextureWrapper = _
-  var trash: TextureWrapper = _
-  var arrowKey: TextureWrapper = _
-  var metaKey: TextureWrapper = _
+  var soundOff: TextureWrapper = uninitialized
+  var soundOn: TextureWrapper = uninitialized
+  var musicOff: TextureWrapper = uninitialized
+  var musicOn: TextureWrapper = uninitialized
+  var help: TextureWrapper = uninitialized
+  var settings: TextureWrapper = uninitialized
+  var close: TextureWrapper = uninitialized
+  var checkOn: TextureWrapper = uninitialized
+  var checkOff: TextureWrapper = uninitialized
+  var trash: TextureWrapper = uninitialized
+  var arrowKey: TextureWrapper = uninitialized
+  var metaKey: TextureWrapper = uninitialized
 
-  var pixture: Texture = _
+  var pixture: Texture = uninitialized
 
-  var click: Sound = _
-  var drop: Sound = _
-  var crash: Sound = _
-  var end: Sound = _
+  var click: Sound = uninitialized
+  var drop: Sound = uninitialized
+  var crash: Sound = uninitialized
+  var end: Sound = uninitialized
 
-  var globalHigh: Int = _
-  var globalTime: Int = _
+  var globalHigh: Int = uninitialized
+  var globalTime: Int = uninitialized
 
   def mobile: Boolean = isMobile(Gdx.app.getType)
 
@@ -144,11 +140,9 @@ object Tertis {
 
   private def solidTexture(r: Float, g: Float, b: Float, a: Float)(implicit
       garbage: GarbageCan
-  ): Texture = {
+  ): Texture =
     val pixel = new Pixmap(1, 1, Format.RGBA8888)
     pixel.setColor(r, g, b, a)
     pixel.fill()
     val td = new PixmapTextureData(pixel, null, false, true)
     garbage.add(new Texture(td))
-  }
-}

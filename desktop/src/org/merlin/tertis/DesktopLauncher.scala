@@ -6,11 +6,9 @@ import com.badlogic.gdx.backends.lwjgl3.{
 }
 import de.damios.guacamole.gdx.StartOnFirstThreadHelper
 
-object DesktopLauncher extends App {
-  StartOnFirstThreadHelper.executeIfJVMValid(() => {
-    val config = new Lwjgl3ApplicationConfiguration
+object DesktopLauncher extends App:
+  StartOnFirstThreadHelper.executeOnValidJVM: () =>
+    val config = Lwjgl3ApplicationConfiguration()
     config.setForegroundFPS(60)
     config.setWindowedMode(500, 1050)
-    new Lwjgl3Application(new Tertis, config)
-  })
-}
+    Lwjgl3Application(Tertis(), config)
