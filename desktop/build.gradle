@@ -26,7 +26,7 @@ compileScala {
 }
 
 dependencies {
-    implementation 'org.scala-lang:scala-library:2.13.8'
+    implementation 'org.scala-lang:scala-library:2.13.16'
     implementation "com.github.crykn.guacamole:gdx-desktop:$guacamoleVersion"
 }
 
