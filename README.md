@@ -12,7 +12,7 @@ for contemporary mobile and game development. Based loosely on a
 The code is horrid and shameful. It contains state and mutation, inconsistencies,
 aberrations and general travesties. Nothing is nice here.
 
-At the time of writing this was built with JDK 21, Scala 3.6.3, libgdx 1.13.1
+At the time of writing this was built with Scala 3.6.3, libgdx 1.13.1, JDK 21
 and Android SDK 36.
 
 The following Android SDK instructions may be out of date, it is not clear what
