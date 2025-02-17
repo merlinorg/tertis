@@ -4,32 +4,28 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
 import com.badlogic.gdx.math.Rectangle
 import org.merlin.tertis.Geometry
-import org.merlin.tertis.Geometry._
+import org.merlin.tertis.Geometry.*
 import org.merlin.tertis.Tertis.pixture
 
-object Frame {
+object Frame:
   // Not really alpha, but the 0f..1f size of the frame
-  var alpha: Float = 0f
+  var alpha: Float       = 0f
   var targetAlpha: Float = 0f
-  var frame: Rectangle = new Rectangle()
+  var frame: Rectangle   = new Rectangle()
 
-  def update(delta: Float): Unit = {
-    if (alpha < targetAlpha) {
-      alpha = (alpha + delta / FadeSpeedSeconds) min 1f
-    } else if (alpha > targetAlpha) {
-      alpha = (alpha - delta / FadeSpeedSeconds) max 0f
-    }
+  def update(delta: Float): Unit =
+    if alpha < targetAlpha then alpha = (alpha + delta / FadeSpeedSeconds) min 1f
+    else if alpha > targetAlpha then alpha = (alpha - delta / FadeSpeedSeconds) max 0f
 
     val offsetY = OffsetY * alpha
     val offsetX = OffsetX * alpha
-    val width =
+    val width   =
       Geometry.ScreenWidth * (1f - alpha) + Columns * Dimension * alpha
-    val height =
+    val height  =
       Geometry.ScreenHeight * (1f - alpha) + Rows * Dimension * alpha
     frame.set(offsetX, offsetY, width, height)
-  }
 
-  def render(batch: PolygonSpriteBatch): Unit = {
+  def render(batch: PolygonSpriteBatch): Unit =
     batch.setColor(BlackColour)
     batch.draw(
       pixture,
@@ -91,10 +87,7 @@ object Frame {
       frame.height + 1
     )
 
-  }
-
   private val BlackColour = new Color(0, 0, 0, 1)
-  private val GreyColour = new Color(.5f, .5f, .5f, 1)
+  private val GreyColour  = new Color(.5f, .5f, .5f, 1)
 
   val FadeSpeedSeconds = .5f
-}

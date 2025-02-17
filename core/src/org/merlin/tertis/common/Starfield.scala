@@ -7,9 +7,9 @@ import com.badlogic.gdx.math.{Quaternion, Vector3}
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-object Starfield {
+object Starfield:
 
-  val NumStars = 256
+  val NumStars      = 256
   val FadeInSeconds = 5f
 
   var alpha = 0f
@@ -18,14 +18,14 @@ object Starfield {
     .fill(NumStars)(Star.newStar)
     .sortBy(star => -star.location.z)
 
-  private val rotation = new Quaternion()
+  private val rotation    = new Quaternion()
   private val translation = new Vector3()
 
-  var r = 0f
-  def update(delta: Float): Unit = {
+  var r                          = 0f
+  def update(delta: Float): Unit =
     r = r + delta
 
-    if (Tertis.mobile) {
+    if Tertis.mobile then
       // So... I want this to match the device orientation, but I just can't.
       // Even with the LPQF the display is super jittery, and then the axes are
       // wrong; the rotation matrix isn't how I expect it to be and so most
@@ -37,9 +37,8 @@ object Starfield {
 //      lowPassFilter.add(rawRotation)
 //      rotation.set(lowPassFilter.value)
       rotation.set(Vector3.X, r / 3)
-    } else {
-      rotation.set(Vector3.X, r / 3)
-    }
+    else rotation.set(Vector3.X, r / 3)
+
     val inverse = new Quaternion(rotation).conjugate()
 
     alpha = (alpha + delta / FadeInSeconds) min 1f
@@ -53,26 +52,18 @@ object Starfield {
     // I don't maintain the sort order of the list but it should remain relatively ordered
     while (stars.size < NumStars)
       stars.prepend(Star.newStar(rotation))
-  }
 
   // This is all a bit wonky but I switched from stars only within the frame to stars only outside the
   // frame to a bit of both...
 
-  def render(batch: PolygonSpriteBatch): Unit = {
+  def render(batch: PolygonSpriteBatch): Unit =
     renderImpl(batch, within = true)
-  }
 
-  def renderOnFrame(batch: PolygonSpriteBatch): Unit = {
+  def renderOnFrame(batch: PolygonSpriteBatch): Unit =
     renderImpl(batch, within = false)
-  }
 
-  def renderImpl(batch: PolygonSpriteBatch, within: Boolean): Unit = {
+  def renderImpl(batch: PolygonSpriteBatch, within: Boolean): Unit =
     val a = within.fold(1f - Frame.alpha / 2, 1f) * alpha
-    if (a != 0f) {
-      stars.foreach(
-        _.draw(batch, a, (x, y) => Frame.frame.contains(x, y) == within)
-      )
-    }
-  }
-
-}
+    if a != 0f then
+      stars.foreach: star =>
+        star.draw(batch, a, (x, y) => Frame.frame.contains(x, y) == within)

@@ -4,21 +4,20 @@ package game
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils
 
-import scala.collection.mutable
+import scala.annotation.tailrec
 import scala.util.Random
 
 trait Test extends ((Int, Int) => Boolean)
 
-/** The symmetric flag causes ---- and _|- to alternate between two positions
-  * instead of truly rotating about a center. Subjective, but I find the true
-  * rotation to be displeasing.
+/** The symmetric flag causes ---- and _|- to alternate between two positions instead of truly rotating about a center.
+  * Subjective, but I find the true rotation to be displeasing.
   */
 final class Block(
-    color: Color,
-    hcColor: Color,
-    bits: Array[String],
-    symmetric: Boolean = false
-) {
+  color: Color,
+  hcColor: Color,
+  bits: Array[String],
+  symmetric: Boolean = false
+):
   import Block.Solid
 
   def getColor: Color = Prefs.LowContrast.fold(color, hcColor)
@@ -28,18 +27,15 @@ final class Block(
   val size: Int = bits.length
 
   val vOffset: Int = bits.reverse.takeWhile(!_.contains(Solid)).length
-  val vWidth: Int = bits.count(_.contains(Solid))
+  val vWidth: Int  = bits.count(_.contains(Solid))
 
-  def forall(rotation: Int, f: (Int, Int) => Boolean): Boolean = {
+  def forall(rotation: Int, f: (Int, Int) => Boolean): Boolean =
     var result = true
-    for (i <- 0 until size if result) {
-      for (j <- 0 until size if result) {
+    for (i <- 0 until size if result)
+      for (j <- 0 until size if result)
         val (x, y) = translate(rotation, i, j)
         result = bits(x)(y) != Solid || f(i, j)
-      }
-    }
     result
-  }
 
   def columnOccupied(rotation: Int, i: Int): Boolean =
     (0 until size).exists(j => test(rotation, i, j))
@@ -57,37 +53,28 @@ final class Block(
     forall(rotation, (i, j) => f(i, j) as true)
 
   def eachSquare[A](
-      rotation: Int,
-      f: (Int, Int, (Int, Int) => Boolean) => A
-  ): Unit = {
-    for (i <- 0 until size) {
-      for (j <- 0 until size) {
+    rotation: Int,
+    f: (Int, Int, (Int, Int) => Boolean) => A
+  ): Unit =
+    for (i <- 0 until size)
+      for (j <- 0 until size)
         val (x, y) = translate(rotation, i, j)
-        if (bits(x)(y) == Solid) {
-          f(i, j, (di, dj) => test(rotation, i + di, j + dj))
-        }
-      }
-    }
+        if bits(x)(y) == Solid then f(i, j, (di, dj) => test(rotation, i + di, j + dj))
 
-  }
-
-  def test(rotation: Int, i: Int, j: Int): Boolean = {
+  def test(rotation: Int, i: Int, j: Int): Boolean =
     val (x, y) = translate(rotation, i, j)
     (x >= 0) && (x < size) && (y >= 0) && (y < size) && bits(x)(y) == Solid
-  }
 
   private def translate(rotation: Int, i: Int, j: Int): (Int, Int) =
-    (rotation % (symmetric.fold(2, 4))) match {
+    rotation % (symmetric.fold(2, 4)) match
       case 0 => (size - 1 - j, i)
       case 1 => (size - 1 - i, size - 1 - j)
       case 2 => (j, size - 1 - i)
       case 3 => (i, j)
       case _ => throw new IllegalArgumentException(s"Rotation $rotation")
-    }
-}
 
 // TODO: support textures for colour blind accessibility...
-object Block {
+object Block:
   final val Solid = '#'
 
   def random: Block = blocks(randomNumber(blocks.length))
@@ -96,16 +83,13 @@ object Block {
     Random.shuffle(blocks).iterator
 
   // I question the randomness of MathUtils.random for 7
-  private def randomNumber(n: Int): Int = {
-    if (n == 7) {
-      var rnd: Int = n
-      while rnd >= n do
-        rnd = MathUtils.random.nextInt >>> 29
-      rnd
-    } else {
-      MathUtils.random(n - 1)
-    }
-  }
+  private def randomNumber(n: Int): Int =
+    if n == 7 then
+      @tailrec def loop: Int =
+        val rnd = MathUtils.random.nextInt >>> 29
+        if rnd >= n then loop else rnd
+      loop
+    else MathUtils.random(n - 1)
 
   // https://observablehq.com/@shan/oklab-color-wheel
   // oklab colour space for perceptual calmness
@@ -184,7 +168,4 @@ object Block {
   private def rgb(r: Int, g: Int, b: Int) =
     new Color(r / 255f, g / 255f, b / 255f, 1f)
 
-  implicit class StringOps(val s: String) extends AnyVal {
-    def toBlock: Array[String] = s.stripMargin.trim.split('\n')
-  }
-}
+  extension (self: String) def toBlock: Array[String] = self.stripMargin.trim.split('\n')

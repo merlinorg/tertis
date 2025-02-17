@@ -3,20 +3,20 @@ package home
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
-import org.merlin.tertis.Geometry._
-import org.merlin.tertis.Scene
+import org.merlin.tertis.Geometry.*
 import org.merlin.tertis.common.{Frame, Starfield}
 import org.merlin.tertis.game.Game
 import org.merlin.tertis.util.TextureWrapper
 
 // I don't like that this fades in after home fades out, but modeling this as a separate scene
 // makes life so much easier.
-class Help(home: Home, game: Option[Game] = None) extends Scene {
+class Help(home: Home, game: Option[Game] = None) extends Scene:
 
-  import Help._
+  import Help.*
+  import State.*
 
-  var state: State = HelpState
-  var alpha: Float = 0f
+  var state: State      = HelpState
+  var alpha: Float      = 0f
   var instructed: Float = 0f
 
   private val IconSize = (Dimension * 3 / 4).floor
@@ -27,9 +27,7 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
       Geometry.ScreenHeight - IconSize * 2,
       IconSize,
       Tertis.close,
-      () => {
-        state = ExitState
-      }
+      () => state = ExitState
     )
   )
 
@@ -38,40 +36,33 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
   override def init(): HelpControl =
     new HelpControl(this)
 
-  override def update(delta: Float): Option[Scene] = {
+  override def update(delta: Float): Option[Scene] =
     Starfield.update(delta)
     Frame.update(delta)
-    if (state == HelpState) {
+    if state == HelpState then
       alpha = alpha.alphaUp(delta, InstructionsFadeInSeconds)
-      if (game.isDefined) {
+      if game.isDefined then
         instructed = instructed + delta
-        if (instructed >= AutoInstructionsSeconds) continue()
-      }
+        if instructed >= AutoInstructionsSeconds then continue()
       None
-    } else {
+    else
       alpha = alpha.alphaDown(delta, InstructionsFadeOutSeconds)
       val awaitFrame = (state == ContinueState) && game.isDefined
       (alpha == 0f && (!awaitFrame || Frame.alpha == 1f))
         .option(game.filter(_ => state == ContinueState).getOrElse(home))
-    }
-  }
 
-  override def render(batch: PolygonSpriteBatch): Unit = {
+  override def render(batch: PolygonSpriteBatch): Unit =
     Starfield.render(batch)
 
-    if (Tertis.mobile) {
-      mobileHelp(batch)
-    } else {
-      desktopIcons.foreach(_.draw(batch, alpha * alpha))
-    }
+    if Tertis.mobile then mobileHelp(batch)
+    else desktopIcons.foreach(_.draw(batch, alpha * alpha))
     icons.foreach(_.draw(batch, alpha * alpha))
 
     Frame.render(batch)
-  }
 
-  private val DesktopIconLeft = IconSize * 2
+  private val DesktopIconLeft     = IconSize * 2
   private val DesktopIconInterval = IconSize * 3
-  private val DesktopIconsTop = Geometry.ScreenHeight - IconSize * 5
+  private val DesktopIconsTop     = Geometry.ScreenHeight - IconSize * 5
 
   val desktopIcons: List[Icon] = List(
     new KeyIcon(
@@ -131,21 +122,21 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
     MobileHelp(Tertis.swipeDown, "Drop", "Swipe down", 1, 4)
   )
 
-  private def mobileHelp(batch: PolygonSpriteBatch): Unit = {
-    val IconSize = Dimension
-    val color = Icon.White ⍺⍺ alpha
-    val grey = Icon.Grey ⍺⍺ alpha
-    val columnSpacing = Dimension / 2
-    val columnWidth = (Geometry.ScreenWidth - columnSpacing * 6) / 3
-    val scale = IconSize / 512
+  private def mobileHelp(batch: PolygonSpriteBatch): Unit =
+    val IconSize        = Dimension
+    val color           = Icon.White ⍺⍺ alpha
+    val grey            = Icon.Grey ⍺⍺ alpha
+    val columnSpacing   = Dimension / 2
+    val columnWidth     = (Geometry.ScreenWidth - columnSpacing * 6) / 3
+    val scale           = IconSize / 512
     val helpEntryHeight =
       Text.smallFont.getLineHeight + Text.tinyFont.getLineHeight + Dimension * 5 / 4
-    val totalHeight = helpEntryHeight * 3 + 2 * Dimension * 2
-    val initialY =
+    val totalHeight     = helpEntryHeight * 3 + 2 * Dimension * 2
+    val initialY        =
       Geometry.ScreenHeight - (Geometry.ScreenHeight - totalHeight) / 2
     batch.setColor(color)
     Text.smallFont.setColor(color)
-    mobileHelps.foreach { help =>
+    mobileHelps.foreach: help =>
       val w = (help.icon.width * scale).floor
       val h = (help.icon.height * scale).floor
       val x = (columnSpacing + (columnWidth + columnSpacing * 2) * help.x).floor
@@ -167,7 +158,7 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
         x,
         columnWidth
       )
-    }
+
     batch.draw(
       Tertis.separator,
       (columnWidth + columnSpacing * 2 - Dimension / 32).floor,
@@ -183,37 +174,29 @@ class Help(home: Home, game: Option[Game] = None) extends Scene {
       totalHeight
     )
 
-  }
-
-  def exit(): Unit = {
+  def exit(): Unit =
     state = ExitState
-  }
 
-  def continue(): Unit = {
-    if (game.isDefined) Frame.targetAlpha = 1f
+  def continue(): Unit =
+    if game.isDefined then Frame.targetAlpha = 1f
     state = ContinueState
-  }
-}
 
-object Help {
-  val InstructionsFadeInSeconds = .3f
+object Help:
+  val InstructionsFadeInSeconds  = .3f
   val InstructionsFadeOutSeconds = .3f
-  val AutoInstructionsSeconds = 5f
+  val AutoInstructionsSeconds    = 5f
 
-  val Red = new Color(.855f, .075f, .102f, 1f)
+  val Red    = new Color(.855f, .075f, .102f, 1f)
   val Yellow = new Color(1f, .937f, 0f, 1f)
-  val White = new Color(.7f, .7f, .7f, 1f)
+  val White  = new Color(.7f, .7f, .7f, 1f)
 
-  sealed trait State
-  case object HelpState extends State
-  case object ExitState extends State
-  case object ContinueState extends State
+  enum State:
+    case HelpState, ExitState, ContinueState
 
   private final case class MobileHelp(
-      icon: TextureWrapper,
-      label: String,
-      desc: String,
-      x: Int,
-      y: Int
+    icon: TextureWrapper,
+    label: String,
+    desc: String,
+    x: Int,
+    y: Int
   )
-}

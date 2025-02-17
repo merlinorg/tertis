@@ -3,42 +3,36 @@ package game
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
-import org.merlin.tertis.Scene
 import org.merlin.tertis.common.{Frame, Starfield}
 import org.merlin.tertis.home.Home
 
 import scala.concurrent.duration.{DurationInt, DurationLong}
 
-class Over(board: Board, score: Score) extends Scene {
-  import Over._
+class Over(board: Board, score: Score) extends Scene:
+  import Over.*
 
-  var time: Float = 0f
+  var time: Float  = 0f
   var alpha: Float = 0f
 
   var done: Boolean = false
 
-  def home(): Unit = {
-    if (time >= .5f) done = true
-  }
+  def home(): Unit =
+    if time >= .5f then done = true
 
-  override def init(): OverControl = {
+  override def init(): OverControl =
     board.ending = true
     Frame.targetAlpha = 0f
     new OverControl(this)
-  }
 
-  override def update(delta: Float): Option[Scene] = {
+  override def update(delta: Float): Option[Scene] =
     time = time + delta
-    if (done)
-      alpha = alpha.alphaDown(delta, OverFadeOutSeconds)
-    else if (time >= OverDelaySeconds)
-      alpha = alpha.alphaUp(delta, OverFadeInSeconds)
+    if done then alpha = alpha.alphaDown(delta, OverFadeOutSeconds)
+    else if time >= OverDelaySeconds then alpha = alpha.alphaUp(delta, OverFadeInSeconds)
     Frame.update(delta)
     board.update(delta)
     (done && alpha == 0f).option(new Home)
-  }
 
-  override def render(batch: PolygonSpriteBatch): Unit = {
+  override def render(batch: PolygonSpriteBatch): Unit =
     Starfield.render(batch)
     board.draw(batch)
 
@@ -50,7 +44,7 @@ class Over(board: Board, score: Score) extends Scene {
     // want springs, will pay
     val content =
       Text.mediumFont.getLineHeight + Text.smallFont.getLineHeight + 5 * Text.tinyFont.getLineHeight
-    val margin =
+    val margin  =
       (Geometry.ScreenHeight - content) / 4
 
     val textY = Geometry.ScreenHeight - margin
@@ -84,7 +78,7 @@ class Over(board: Board, score: Score) extends Scene {
       statsY
     )
 
-    Prefs.AllTime.longValue foreach { allTime =>
+    Prefs.AllTime.longValue.foreach: allTime =>
       Text.draw(
         batch,
         Text.tinyFont,
@@ -92,15 +86,10 @@ class Over(board: Board, score: Score) extends Scene {
         s"All Time: ${allTime.seconds.toHumanString}",
         margin + Text.tinyFont.getLineHeight
       )
-    }
 
     Frame.render(batch)
 
-  }
-}
-
-object Over {
-  val OverDelaySeconds = 0.2f
-  val OverFadeInSeconds = 0.5f
+object Over:
+  val OverDelaySeconds   = 0.2f
+  val OverFadeInSeconds  = 0.5f
   val OverFadeOutSeconds = 0.3f
-}
