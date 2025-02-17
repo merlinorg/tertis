@@ -20,6 +20,7 @@ public class AndroidLauncher extends AndroidApplication {
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.useAccelerometer = true;
         config.useCompass = true;
+        config.renderUnderCutout = true;
         initialize(new Tertis(), config);
     }
 
