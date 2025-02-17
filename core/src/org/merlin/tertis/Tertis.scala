@@ -90,7 +90,7 @@ class Tertis extends ApplicationAdapter:
     Gdx.input.setInputProcessor(scene.init())
 
 object Tertis:
-  implicit val garbage: GarbageCan = new GarbageCan
+  given garbage: GarbageCan = new GarbageCan
 
   var version: String = uninitialized
   var key: String     = uninitialized
@@ -133,10 +133,10 @@ object Tertis:
   private def isMobile(tpe: ApplicationType) =
     tpe == ApplicationType.Android || tpe == ApplicationType.iOS
 
-  private def loadSound(path: String)(implicit garbage: GarbageCan): Sound =
+  private def loadSound(path: String)(using garbage: GarbageCan): Sound =
     garbage.add(Gdx.audio.newSound(Gdx.files.internal(path)))
 
-  private def solidTexture(r: Float, g: Float, b: Float, a: Float)(implicit
+  private def solidTexture(r: Float, g: Float, b: Float, a: Float)(using
     garbage: GarbageCan
   ): Texture =
     val pixel = new Pixmap(1, 1, Format.RGBA8888)

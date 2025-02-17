@@ -11,7 +11,7 @@ import org.merlin.tertis.util.GarbageCan
 import scala.compiletime.uninitialized
 
 object Text:
-  def loadFonts()(implicit garbage: GarbageCan): Unit =
+  def loadFonts()(using garbage: GarbageCan): Unit =
     val generator = new FreeTypeFontGenerator(
       Gdx.files.internal("OpenSans-Regular.ttf")
     )

@@ -15,7 +15,7 @@ class TextureWrapper(val pixmap: Pixmap) extends Disposable:
     pixmap.dispose()
 
 object TextureWrapper:
-  def load(path: String)(implicit garbageCan: GarbageCan): TextureWrapper =
+  def load(path: String)(using garbageCan: GarbageCan): TextureWrapper =
     val fileHandle = Gdx.files.internal(path)
     val pixmap     = new Pixmap(fileHandle)
     garbageCan.add(new TextureWrapper(pixmap))
