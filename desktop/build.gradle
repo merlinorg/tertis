@@ -2,10 +2,11 @@ plugins {
     id 'scala'
 }
 
-sourceCompatibility = JavaVersion.VERSION_21
-targetCompatibility = JavaVersion.VERSION_21
+//sourceCompatibility = JavaVersion.VERSION_21
+//targetCompatibility = JavaVersion.VERSION_21
 
 compileScala {
+    targetCompatibility = '17'
     scalaCompileOptions.deprecation = true
     scalaCompileOptions.unchecked = true
     scalaCompileOptions.optimize = false
@@ -15,12 +16,13 @@ compileScala {
             '-language:existentials',
             '-encoding', 'UTF-8',
             '-Ybackend-parallelism', '4',
-            '-Xfatal-warnings'
+            '-Werror',
+            '-Xunchecked-java-output-version:17'
     ]
 }
 
 dependencies {
-    implementation 'org.scala-lang:scala3-library_3:3.6.3'
+    implementation 'org.scala-lang:scala3-library_3:3.8.3'
     implementation "com.github.crykn.guacamole:gdx-desktop:$guacamoleVersion"
 }
 

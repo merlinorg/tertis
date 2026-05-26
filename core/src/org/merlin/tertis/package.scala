@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Peripheral
 import com.badlogic.gdx.graphics.Color
 
 import java.util.concurrent.TimeUnit
+import scala.annotation.nowarn
 import scala.concurrent.duration.FiniteDuration
 
 def compassAvailable: Boolean =
@@ -14,7 +15,7 @@ val CenterAlign = 1
 
 // Things kinda stolen from scaloi
 
-extension (self: Any)
+extension (@nowarn("msg=unused") self: Any)
   /** Replace this value with [a]. */
   infix def as[A](a: A): A = a
 

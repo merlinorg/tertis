@@ -16,7 +16,7 @@ android {
         }
     }
 
-    compileSdk 34
+    compileSdk 36
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
@@ -34,25 +34,26 @@ android {
 
     }
     packagingOptions {
-        exclude 'META-INF/robovm/ios/robovm.xml'
+        resources {
+            excludes += ['META-INF/robovm/ios/robovm.xml']
+        }
     }
     defaultConfig {
         applicationId "org.merlin.tertis"
-        minSdkVersion 32
-        targetSdkVersion 35
+        minSdkVersion 36
+        targetSdkVersion 37
         versionCode 1
         versionName "${version}"
     }
     buildTypes {
         debug {
-            debuggable true // incompatible with minify
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+            minifyEnabled false
         }
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
     }

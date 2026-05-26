@@ -12,8 +12,8 @@ for contemporary mobile and game development. Based loosely on a
 The code is horrid and shameful. It contains state and mutation, inconsistencies,
 aberrations and general travesties. Nothing is nice here.
 
-At the time of writing this was built with Scala 3.6.3, libgdx 1.13.1, JDK 21
-and Android SDK 36.
+At the time of writing this was built with Scala 3.8.3, libgdx 1.14.1, JDK 21
+and Android SDK 37.
 
 The following Android SDK instructions may be out of date, it is not clear what
 updates have happened since they were written.
@@ -35,7 +35,7 @@ brew install android-commandlinetools
 * Then install the build tools and platforms (while agreeing to sell your firstborn):
 
 ```shell
-sdkmanager 'platforms;android-29' 'build-tools;29.0.2' tools
+sdkmanager 'platforms;android-36' 'build-tools;37.0.0' tools
 ```
 
 * Create a file `local.properties`:

@@ -30,7 +30,8 @@ class GameControl(game: Game) extends InputAdapter:
     down
       .remove(pointer)
       .foreach: (oldX, oldY) =>
-        val third = oldX * 3 / Geometry.ScreenWidth
+        val tenth = oldX * 10 / Geometry.ScreenWidth
+        val third = if tenth < 3 then 0 else if tenth < 7 then 1 else 2
 
         val swipe =
           (oldX - screenX) * (oldX - screenX) + (oldY - screenY) * (oldY - screenY) > SwipeDistance * SwipeDistance
