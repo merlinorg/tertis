@@ -9,6 +9,10 @@ in [Scala 3](https://www.scala-lang.org/), the premier programming language
 for contemporary mobile and game development. Based loosely on a
 [prior thing](https://www.youtube.com/watch?v=YYGulsgO-os).
 
+<p align="center">
+  <img src="assets/tertis.gif" alt="Tertis video" width="256" />
+</p>
+
 The code is horrid and shameful. It contains state and mutation, inconsistencies,
 aberrations and general travesties. Nothing is nice here.
 
